@@ -1,0 +1,14 @@
+package com.mhmtn.satellites2.domain.repo
+
+import android.content.Context
+import com.mhmtn.satellites2.data.model.SatelliteDetail
+import com.mhmtn.satellites2.data.model.SatelliteDetailItem
+import com.mhmtn.satellites2.data.model.Satellites
+import com.mhmtn.satellites2.data.model.SatellitesItem
+
+interface SatelliteRepo {
+
+    suspend fun getSatellites(): List<SatellitesItem>
+    suspend fun getSatelliteDetail(id:Int) : SatelliteDetailItem
+
+}
