@@ -10,13 +10,7 @@ import javax.inject.Inject
 
 class GetSatelliteUseCase @Inject constructor(private val repo : SatelliteRepo) {
 
-    fun executeGetSatellites (context: Context) : Flow<Resource<List<SatellitesItem>>> = flow {
-        try {
-            emit(Resource.Loading())
-            val satellitesList = repo.getSatellites()
-            emit(Resource.Success(satellitesList))
-        }catch (e:Exception){
-            emit(Resource.Error(e.localizedMessage ?: "Error."))
-        }
+   suspend fun executeGetSatellites () : Flow<Resource<List<SatellitesItem>>>  {
+        return repo.getSatellites()
     }
 }

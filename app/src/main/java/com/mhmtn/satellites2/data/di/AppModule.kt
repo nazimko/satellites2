@@ -3,12 +3,13 @@ package com.mhmtn.satellites2.data.di
 import android.app.Application
 import android.content.Context
 import com.google.gson.Gson
-import com.mhmtn.satellites2.data.local.ParseJson
 import com.mhmtn.satellites2.data.repo.SatelliteRepoImpl
+import com.mhmtn.satellites2.domain.dataSource.SatelliteDataSource
 import com.mhmtn.satellites2.domain.repo.SatelliteRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -16,15 +17,18 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+
     @Provides
-    @Singleton
-    fun providesSatelliteRepo(api:ParseJson, context:Context) : SatelliteRepo{
-        return SatelliteRepoImpl(api, context)
+    fun provideSatellitesDataSource(@ApplicationContext context: Context): SatelliteDataSource {
+        return SatelliteDataSource(context)
     }
 
     @Provides
     @Singleton
-    fun provideSatelliteApi() = ParseJson()
+    fun providesSatelliteRepo(dataSource: SatelliteDataSource) : SatelliteRepo{
+        return SatelliteRepoImpl(dataSource)
+    }
+
 
     @Provides
     @Singleton

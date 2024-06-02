@@ -69,11 +69,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation ("com.google.dagger:hilt-android:2.49")
-    annotationProcessor("com.google.dagger:hilt-android-compiler:2.48.1")
-    annotationProcessor("androidx.hilt:hilt-compiler:1.2.0")
+    implementation(libs.dagger.hilt)
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
     implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     implementation ("com.google.code.gson:gson:2.10.1")
+    implementation ("androidx.navigation:navigation-compose:2.7.7")
+/*
+    implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
+    implementation(libs.androidx.compose.material3.adaptive.navigation)
 
+ */
 }

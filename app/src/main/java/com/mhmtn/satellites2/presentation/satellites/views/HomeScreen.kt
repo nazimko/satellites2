@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.mhmtn.satellites2.presentation.satellites.SatellitesEvent
 import com.mhmtn.satellites2.presentation.satellites.SatellitesViewModel
 import com.mhmtn.satellites2.presentation.theme.Gray80
 
@@ -55,18 +57,17 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            /*
+
             SearchBar(modifier = Modifier
                 .background(color = Gray80)
                 .padding(16.dp)){
-
+                viewModel.onEvent(event = SatellitesEvent.Search(it))
             }
-
-             */
 
             LazyColumn (modifier = Modifier.fillMaxSize()) {
                 items(state.satelltes){
                     SatelliteRow(navController = navController, satellite = it)
+                    Divider(color = Color.Black)
                 }
             }
         }
