@@ -1,6 +1,7 @@
 package com.mhmtn.satellites2
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,8 +17,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.mhmtn.satellites2.data.repo.Destination
+import com.mhmtn.satellites2.presentation.satellite_detail.views.DetailScreen
 import com.mhmtn.satellites2.presentation.satellites.views.HomeScreen
 import com.mhmtn.satellites2.presentation.theme.Satellites2Theme
+import com.mhmtn.satellites2.util.Constants.SatelliteID
+import com.mhmtn.satellites2.util.Constants.SatelliteName
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,13 +36,13 @@ class MainActivity : ComponentActivity() {
                     composable(Destination.HomeScreen.route){
 
                         HomeScreen(navController = navController)
-
                     }
 
+                    composable(Destination.DetailScreen.route+"/{${SatelliteID}}/{${SatelliteName}}"){
+                        DetailScreen()
+                    }
                 }
-
             }
         }
     }
 }
-

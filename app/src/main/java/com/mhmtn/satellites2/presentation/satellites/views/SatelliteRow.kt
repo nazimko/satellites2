@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.mhmtn.satellites2.data.model.SatellitesItem
+import com.mhmtn.satellites2.data.repo.Destination
 import com.mhmtn.satellites2.presentation.theme.Gray80
 
 @Composable
@@ -30,8 +31,6 @@ fun SatelliteRow (
     satellite : SatellitesItem
 ){
 
-    val context = LocalContext.current
-
     Row (horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -39,7 +38,7 @@ fun SatelliteRow (
             .fillMaxWidth()
             .padding(4.dp)
             .clickable {
-
+                navController.navigate(Destination.DetailScreen.route + "/${satellite.id}/${satellite.name}")
             }) {
         Canvas(modifier = Modifier
             .fillMaxHeight(0.5f)

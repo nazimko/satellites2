@@ -1,4 +1,4 @@
-package com.mhmtn.satellites2.data.local
+package com.mhmtn.satellites2.util
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

@@ -1,11 +1,5 @@
 package com.mhmtn.satellites2.presentation.satellites
 
-import android.annotation.SuppressLint
-import android.app.Application
-import android.content.Context
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mhmtn.satellites2.data.model.SatellitesItem
@@ -16,8 +10,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -46,7 +38,7 @@ class SatellitesViewModel @Inject constructor(
                 }
 
                 is Resource.Success -> {
-                    _state.value = SatellitesState(satelltes = it.data ?: emptyList())
+                    _state.value = SatellitesState(satellites = it.data ?: emptyList())
                 }
             }
         }
@@ -58,7 +50,7 @@ class SatellitesViewModel @Inject constructor(
         when (event){
             is SatellitesEvent.Search -> {
                 val listToSearch = if (isSearchStarting){
-                    _state.value.satelltes
+                    _state.value.satellites
                 }else{
                     asilListe
                 }
@@ -66,7 +58,7 @@ class SatellitesViewModel @Inject constructor(
                 viewModelScope.launch (Dispatchers.Default) {
 
                     if (event.searchString.isEmpty()){
-                        _state.value = SatellitesState(satelltes = asilListe)
+                        _state.value = SatellitesState(satellites = asilListe)
                         isSearchStarting = true
                         return@launch
                     }
@@ -76,10 +68,10 @@ class SatellitesViewModel @Inject constructor(
                     }
 
                     if (isSearchStarting){
-                        asilListe = _state.value.satelltes
+                        asilListe = _state.value.satellites
                         isSearchStarting=false
                     }
-                    _state.value=SatellitesState(satelltes = results)
+                    _state.value=SatellitesState(satellites = results)
                 }
             }
         }

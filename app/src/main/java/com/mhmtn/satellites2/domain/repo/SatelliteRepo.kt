@@ -9,8 +9,6 @@ import com.mhmtn.satellites2.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface SatelliteRepo {
-
     suspend fun getSatellites(): Flow<Resource<List<SatellitesItem>>>
-    suspend fun getSatelliteDetail(id:Int) : Flow<SatelliteDetailItem>
-
+    suspend fun getSatelliteDetail(id:Int) : Flow<Resource<SatelliteDetailItem>>
 }

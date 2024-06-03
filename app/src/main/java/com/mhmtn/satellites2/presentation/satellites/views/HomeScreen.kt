@@ -65,7 +65,7 @@ fun HomeScreen(
             }
 
             LazyColumn (modifier = Modifier.fillMaxSize()) {
-                items(state.satelltes){
+                items(state.satellites){
                     SatelliteRow(navController = navController, satellite = it)
                     Divider(color = Color.Black)
                 }
