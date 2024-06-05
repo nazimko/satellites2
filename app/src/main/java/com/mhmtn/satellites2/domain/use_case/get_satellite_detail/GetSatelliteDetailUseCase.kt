@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class GetSatelliteDetailUseCase @Inject constructor(private val repo:SatelliteRepo) {
 
-    suspend fun executeGetSatelliteDetail (id:Int) : Flow<Resource<SatelliteDetailItem>> {
+    suspend fun executeGetSatelliteDetail (id:Int) : Flow<Resource<SatelliteDetailItem?>> {
         return repo.getSatelliteDetail(id)
     }
 }

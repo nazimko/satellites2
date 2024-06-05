@@ -1,5 +1,6 @@
 package com.mhmtn.satellites2.presentation.satellite_detail.views
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,8 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,8 +27,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.mhmtn.satellites2.data.model.PositionsItem
 import com.mhmtn.satellites2.presentation.satellite_detail.DetailViewModel
 import com.mhmtn.satellites2.presentation.theme.Gray80
+import com.mhmtn.satellites2.util.Resource
 
 @Composable
 fun DetailScreen(
@@ -32,7 +39,8 @@ fun DetailScreen(
 
     val state by viewModel.state.collectAsState()
     val name by viewModel.name.collectAsState()
-    
+    val position by viewModel.positionState.collectAsState()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -51,6 +59,7 @@ fun DetailScreen(
                 DetailRow(text = "Height/Mass:", detail1 = it.height, detail2 = it.mass)
                 Spacer(modifier = Modifier.height(16.dp))
                 DetailRow(text = "Cost:", detail1 =it.cost_per_launch, detail2 =null )
+                Text(text = position.position?.positions?.get(1).toString())
             }
         }
 

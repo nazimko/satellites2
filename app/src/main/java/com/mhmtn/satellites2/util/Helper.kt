@@ -7,3 +7,8 @@ inline fun <reified T> parseJsonToModel(jsonString: String): T {
     val gson = Gson()
     return gson.fromJson(jsonString, object : TypeToken<T>() {}.type)
 }
+
+inline fun <reified T> getItemById(dataList: List<T>, targetId: Int, idSelector: (T) -> Int): T? {
+    return dataList.find { idSelector(it) == targetId }
+}
+

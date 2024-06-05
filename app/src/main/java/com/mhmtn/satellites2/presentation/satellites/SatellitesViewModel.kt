@@ -40,6 +40,7 @@ class SatellitesViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = SatellitesState(satellites = it.data ?: emptyList())
                 }
+
             }
         }
     }

@@ -3,6 +3,8 @@ package com.mhmtn.satellites2.presentation.satellite_detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mhmtn.satellites2.data.model.PositionsItem
+import com.mhmtn.satellites2.domain.use_case.get_positions.GetPositionsUseCase
 import com.mhmtn.satellites2.domain.use_case.get_satellite_detail.GetSatelliteDetailUseCase
 import com.mhmtn.satellites2.presentation.satellites.SatellitesState
 import com.mhmtn.satellites2.util.Constants.SatelliteID
@@ -20,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val useCase:GetSatelliteDetailUseCase,
+    private val positionsUseCase : GetPositionsUseCase,
     private val stateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -29,8 +32,12 @@ class DetailViewModel @Inject constructor(
     private val _name = MutableStateFlow("")
     val name : StateFlow<String> = _name
 
+    private val _positionState = MutableStateFlow(PositionState())
+    val positionState : StateFlow<PositionState> = _positionState.asStateFlow()
+
     init {
         stateHandle.get<String>(SatelliteID)?.let {
+            getPositions(it.toInt())
             getSatelliteDetail(it.toInt())
         }
         _name.value = stateHandle.get<String>(SatelliteName).toString()
@@ -48,4 +55,20 @@ class DetailViewModel @Inject constructor(
             }
         }
     }
+
+
+     private fun getPositions(id: Int) = viewModelScope.launch {
+        positionsUseCase.executeGetPositions(id=id).onStart { _positionState.update { it.copy(isLoading = true) } }.collect{
+            when(it){
+                is Resource.Error -> {
+                    _positionState.value = PositionState(error = it.message.orEmpty(), isLoading = false)
+                }
+                is Resource.Success -> {
+                    _positionState.value = PositionState(position = it.data!!, isLoading = false)
+                }
+            }
+        }
+    }
+
+
 }

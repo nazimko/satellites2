@@ -2,4 +2,5 @@
     <string name="app_name">Satellites2</string>
     <string name="Satellites">satellites.json</string>
     <string name="SatelliteDetail">satellite_detail.json</string>
+    <string name="Positions">positions.json</string>
 </resources>
