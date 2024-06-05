@@ -12,5 +12,5 @@ import kotlinx.coroutines.flow.Flow
 interface SatelliteRepo {
     suspend fun getSatellites(): Flow<Resource<List<SatellitesItem>>>
     suspend fun getSatelliteDetail(id:Int) : Flow<Resource<SatelliteDetailItem?>>
-    suspend fun getPositions(id:Int) : Flow<Resource<PositionsItem?>>
+    suspend fun getPositions(id:Int) : Flow<Resource<String>>
 }

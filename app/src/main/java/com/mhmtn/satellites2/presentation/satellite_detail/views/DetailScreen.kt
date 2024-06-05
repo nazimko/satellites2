@@ -59,7 +59,7 @@ fun DetailScreen(
                 DetailRow(text = "Height/Mass:", detail1 = it.height, detail2 = it.mass)
                 Spacer(modifier = Modifier.height(16.dp))
                 DetailRow(text = "Cost:", detail1 =it.cost_per_launch, detail2 =null )
-                Text(text = position.position?.positions?.get(1).toString())
+                Text(text = position.position)
             }
         }
 

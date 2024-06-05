@@ -3,6 +3,7 @@ package com.mhmtn.satellites2.domain.dataSource
 import android.content.Context
 import android.util.Log
 import com.mhmtn.satellites2.R
+import com.mhmtn.satellites2.data.model.DataList
 import com.mhmtn.satellites2.data.model.PositionsItem
 import com.mhmtn.satellites2.util.parseJsonToModel
 import com.mhmtn.satellites2.data.model.SatelliteDetailItem
@@ -43,18 +44,14 @@ class SatelliteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getPositions(id: Int): Flow<Resource<PositionsItem?>> = flow {
+    suspend fun getPositions(id: Int): Flow<Resource<String>> = flow {
         try {
             val response = context.readJsonFromAssets(context.getString(R.string.Positions))
-            Log.d("responsePosition",response)
-            val positions = parseJsonToModel<List<PositionsItem>>(response)
-            val position = getItemById(positions, targetId = id){
-                it.id.toInt()
-            }
-            if (position != null) {
-                Log.d("position",position.id)
-            }
-            emit(Resource.Success(position))
+            val positionItems = parseJsonToModel<DataList>(response)
+            val position = positionItems.list.find { it.id == id.toString() }
+           val randomPosition =  position?.positions?.first()
+            val combinedPosition = "${randomPosition?.posX.toString()} - ${randomPosition?.posY.toString()}"
+            emit(Resource.Success(combinedPosition))
         } catch (e: Exception) {
             emit(Resource.Error(e.localizedMessage ?: "Error."))
         }

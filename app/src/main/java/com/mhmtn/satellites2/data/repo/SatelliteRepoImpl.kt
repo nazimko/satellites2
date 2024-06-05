@@ -20,7 +20,7 @@ class SatelliteRepoImpl @Inject constructor(
         return dataSource.getSatelliteDetail(id)
     }
 
-    override suspend fun getPositions(id: Int): Flow<Resource<PositionsItem?>> {
+    override suspend fun getPositions(id: Int): Flow<Resource<String>> {
         return dataSource.getPositions(id)
     }
 }

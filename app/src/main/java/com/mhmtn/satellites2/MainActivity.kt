@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
                         HomeScreen(navController = navController)
                     }
 
-                    composable(Destination.DetailScreen.route+"/{${SatelliteID}}/{${SatelliteName}}"){
+                    composable(Destination.DetailScreen.route){
                         DetailScreen()
                     }
                 }

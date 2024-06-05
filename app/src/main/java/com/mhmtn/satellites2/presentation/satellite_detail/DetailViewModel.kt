@@ -64,7 +64,7 @@ class DetailViewModel @Inject constructor(
                     _positionState.value = PositionState(error = it.message.orEmpty(), isLoading = false)
                 }
                 is Resource.Success -> {
-                    _positionState.value = PositionState(position = it.data!!, isLoading = false)
+                    _positionState.value = PositionState(position = it.data.orEmpty(), isLoading = false)
                 }
             }
         }

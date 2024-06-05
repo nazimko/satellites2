@@ -26,26 +26,34 @@ import com.mhmtn.satellites2.data.repo.Destination
 import com.mhmtn.satellites2.presentation.theme.Gray80
 
 @Composable
-fun SatelliteRow (
+fun SatelliteRow(
     navController: NavController,
-    satellite : SatellitesItem
-){
+    satellite: SatellitesItem
+) {
 
-    Row (horizontalArrangement = Arrangement.SpaceEvenly,
+    Row(horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .background(color = Gray80)
             .fillMaxWidth()
             .padding(4.dp)
             .clickable {
-                navController.navigate(Destination.DetailScreen.route + "/${satellite.id}/${satellite.name}")
+                navController.navigate(
+                    Destination.DetailScreen.createRoute(
+                        satellite.id,
+                        satellite.name
+                    )
+                )
             }) {
-        Canvas(modifier = Modifier
-            .fillMaxHeight(0.5f)
-            .padding(16.dp)) {
+        Canvas(
+            modifier = Modifier
+                .fillMaxHeight(0.5f)
+                .padding(16.dp)
+        ) {
             drawCircle(
                 color = if (satellite.active) {
-                    Color.Green} else Color.Red ,
+                    Color.Green
+                } else Color.Red,
                 radius = 40f
             )
         }
@@ -53,7 +61,11 @@ fun SatelliteRow (
         Column {
             Text(text = satellite.name, fontWeight = FontWeight.SemiBold)
             Spacer(modifier = Modifier.padding(2.dp))
-            Text(text = if (satellite.active){ "Active" } else "Passive")
+            Text(
+                text = if (satellite.active) {
+                    "Active"
+                } else "Passive"
+            )
         }
         Spacer(modifier = Modifier.height(10.dp))
     }
