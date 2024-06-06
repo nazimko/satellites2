@@ -1,22 +1,23 @@
 package com.mhmtn.satellites2.domain.use_case.get_satellites
 
 import com.mhmtn.satellites2.data.model.SatellitesItem
-import com.mhmtn.satellites2.domain.repo.SatelliteRepo
-import com.mhmtn.satellites2.presentation.satellites.SatellitesState
+import com.mhmtn.satellites2.util.Resource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class SearchSatelliteUseCase @Inject constructor()  {
-    fun executeSearchSatellite(searchString: String, satellites: List<SatellitesItem>):
-            Flow<List<SatellitesItem>> = flow {
-
-            if (searchString.isEmpty()){
-                emit(satellites)
-            }
-
-            emit(satellites.filter {
-                it.name.contains(searchString.trim(),ignoreCase = true)
-            })
-    }
+class SearchSatelliteUseCase @Inject constructor(
+        private val getSatelliteUseCase: GetSatelliteUseCase
+) {
+    suspend fun executeSearchSatellite(searchString: String): Flow<List<SatellitesItem>> =
+            getSatelliteUseCase.executeGetSatellites()
+                    .filterIsInstance<Resource.Success<List<SatellitesItem>>>()
+                    .map {
+                        it.data.orEmpty().filter { satellite ->
+                            satellite.name.contains(searchString.trim(), ignoreCase = true)
+                        }
+                    }
 }

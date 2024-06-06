@@ -21,19 +21,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val useCase:GetSatelliteDetailUseCase,
-    private val positionsUseCase : GetPositionsUseCase,
+    private val useCase: GetSatelliteDetailUseCase,
+    private val positionsUseCase: GetPositionsUseCase,
     private val stateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(DetailState())
-    val state : StateFlow<DetailState> = _state.asStateFlow()
+    val state: StateFlow<DetailState> = _state.asStateFlow()
 
     private val _name = MutableStateFlow("")
-    val name : StateFlow<String> = _name
+    val name: StateFlow<String> = _name
 
     private val _positionState = MutableStateFlow(PositionState())
-    val positionState : StateFlow<PositionState> = _positionState.asStateFlow()
+    val positionState: StateFlow<PositionState> = _positionState.asStateFlow()
 
     init {
         stateHandle.get<String>(SatelliteID)?.let {
@@ -42,11 +42,12 @@ class DetailViewModel @Inject constructor(
         }
         _name.value = stateHandle.get<String>(SatelliteName).toString()
     }
-    private fun getSatelliteDetail(id : Int) = viewModelScope.launch {
+
+    private fun getSatelliteDetail(id: Int) = viewModelScope.launch {
         useCase.executeGetSatelliteDetail(id = id).onStart {
             _state.update { it.copy(isLoading = true) }
-        }.collect {res->
-            when(res){
+        }.collect { res ->
+            when (res) {
                 is Resource.Error -> {
                     _state.update { it.copy(error = res.message.orEmpty(), isLoading = false) }
                 }
@@ -57,14 +58,21 @@ class DetailViewModel @Inject constructor(
             }
         }
     }
-     private fun getPositions(id: Int) = viewModelScope.launch {
-        positionsUseCase.executeGetPositions(id=id).onStart {
+
+    private fun getPositions(id: Int) = viewModelScope.launch {
+        positionsUseCase.executeGetPositions(id = id).onStart {
             _positionState.update { it.copy(isLoading = true) }
-        }.collect{res->
-            when(res){
+        }.collect { res ->
+            when (res) {
                 is Resource.Error -> {
-                    _positionState.update { it.copy(error = res.message.orEmpty(), isLoading = false) }
+                    _positionState.update {
+                        it.copy(
+                            error = res.message.orEmpty(),
+                            isLoading = false
+                        )
+                    }
                 }
+
                 is Resource.Success -> {
                     _positionState.update { it.copy(position = res.data!!, isLoading = false) }
                 }
