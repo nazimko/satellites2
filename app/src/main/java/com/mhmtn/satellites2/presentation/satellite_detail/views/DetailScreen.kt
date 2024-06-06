@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -59,7 +60,11 @@ fun DetailScreen(
                 DetailRow(text = "Height/Mass:", detail1 = it.height, detail2 = it.mass)
                 Spacer(modifier = Modifier.height(16.dp))
                 DetailRow(text = "Cost:", detail1 =it.cost_per_launch, detail2 =null )
-                Text(text = position.position)
+                Spacer(modifier = Modifier.height(16.dp))
+                Row {
+                    Text(text = "Last Position: " , fontWeight = FontWeight.Bold)
+                    Text(text = "(${position.position})")
+                }
             }
         }
 

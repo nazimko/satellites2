@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetSatelliteUseCase @Inject constructor(private val repo : SatelliteRepo) {
-
    suspend fun executeGetSatellites () : Flow<Resource<List<SatellitesItem>>>  {
         return repo.getSatellites()
     }

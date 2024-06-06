@@ -83,9 +83,12 @@ fun HomeScreen(
                     .align(Alignment.Center))
         }
 
+
         if (state.isLoading){
             CircularProgressIndicator()
         }
+
+
     }
 }
 
@@ -93,7 +96,7 @@ fun HomeScreen(
 fun SearchBar(modifier: Modifier = Modifier,
               onSearch : (String) -> Unit = {}
 ) {
-    var text = remember { mutableStateOf("") }
+    val text = remember { mutableStateOf("") }
 
     Box (modifier = modifier) {
 

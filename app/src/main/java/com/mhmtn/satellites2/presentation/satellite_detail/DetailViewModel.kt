@@ -43,32 +43,32 @@ class DetailViewModel @Inject constructor(
         _name.value = stateHandle.get<String>(SatelliteName).toString()
     }
     private fun getSatelliteDetail(id : Int) = viewModelScope.launch {
-        useCase.executeGetSatelliteDetail(id = id).onStart { _state.update { it.copy(isLoading = true) } }.collect {
-            when(it){
+        useCase.executeGetSatelliteDetail(id = id).onStart {
+            _state.update { it.copy(isLoading = true) }
+        }.collect {res->
+            when(res){
                 is Resource.Error -> {
-                    _state.value = DetailState(error = it.message.orEmpty())
+                    _state.update { it.copy(error = res.message.orEmpty(), isLoading = false) }
                 }
 
                 is Resource.Success -> {
-                    _state.value = DetailState(satellite = it.data!!)
+                    _state.update { it.copy(satellite = res.data!!, isLoading = false) }
                 }
             }
         }
     }
-
-
      private fun getPositions(id: Int) = viewModelScope.launch {
-        positionsUseCase.executeGetPositions(id=id).onStart { _positionState.update { it.copy(isLoading = true) } }.collect{
-            when(it){
+        positionsUseCase.executeGetPositions(id=id).onStart {
+            _positionState.update { it.copy(isLoading = true) }
+        }.collect{res->
+            when(res){
                 is Resource.Error -> {
-                    _positionState.value = PositionState(error = it.message.orEmpty(), isLoading = false)
+                    _positionState.update { it.copy(error = res.message.orEmpty(), isLoading = false) }
                 }
                 is Resource.Success -> {
-                    _positionState.value = PositionState(position = it.data.orEmpty(), isLoading = false)
+                    _positionState.update { it.copy(position = res.data!!, isLoading = false) }
                 }
             }
         }
     }
-
-
 }

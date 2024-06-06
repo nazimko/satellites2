@@ -1,16 +1,17 @@
 package com.mhmtn.satellites2.domain.dataSource
 
 import android.content.Context
-import android.util.Log
-import com.mhmtn.satellites2.R
 import com.mhmtn.satellites2.data.model.DataList
-import com.mhmtn.satellites2.data.model.PositionsItem
 import com.mhmtn.satellites2.util.parseJsonToModel
 import com.mhmtn.satellites2.data.model.SatelliteDetailItem
 import com.mhmtn.satellites2.data.model.SatellitesItem
+import com.mhmtn.satellites2.util.Constants.POSITIONS
+import com.mhmtn.satellites2.util.Constants.SATELLITES
+import com.mhmtn.satellites2.util.Constants.SATELLITE_DETAIL
 import com.mhmtn.satellites2.util.Resource
 import com.mhmtn.satellites2.util.getItemById
 import com.mhmtn.satellites2.util.readJsonFromAssets
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class SatelliteDataSource @Inject constructor(
 
     suspend fun getSatellites(): Flow<Resource<List<SatellitesItem>>> = flow {
         try {
-            val response = context.readJsonFromAssets(context.getString(R.string.Satellites))
+            val response = context.readJsonFromAssets(SATELLITES)
             emit(Resource.Success(parseJsonToModel<List<SatellitesItem>>(response)))
         } catch (e: Exception) {
             emit(Resource.Error(e.localizedMessage ?: "Error."))
@@ -30,13 +31,9 @@ class SatelliteDataSource @Inject constructor(
 
     suspend fun getSatelliteDetail(id: Int): Flow<Resource<SatelliteDetailItem?>> = flow {
         try {
-            val response = context.readJsonFromAssets(context.getString(R.string.SatelliteDetail))
-            Log.d("responseDetail",response)
+            val response = context.readJsonFromAssets(SATELLITE_DETAIL)
             val item = getItemById(parseJsonToModel<List<SatelliteDetailItem>>(response), id){
                 it.id
-            }
-            if (item != null) {
-                Log.d("item",item.id.toString())
             }
             emit(Resource.Success(item))
         } catch (e: Exception) {
@@ -46,12 +43,16 @@ class SatelliteDataSource @Inject constructor(
 
     suspend fun getPositions(id: Int): Flow<Resource<String>> = flow {
         try {
-            val response = context.readJsonFromAssets(context.getString(R.string.Positions))
+            val response = context.readJsonFromAssets(POSITIONS)
             val positionItems = parseJsonToModel<DataList>(response)
             val position = positionItems.list.find { it.id == id.toString() }
-           val randomPosition =  position?.positions?.first()
-            val combinedPosition = "${randomPosition?.posX.toString()} - ${randomPosition?.posY.toString()}"
-            emit(Resource.Success(combinedPosition))
+            val randomPosition =  position?.positions!!
+            for (item in randomPosition){
+                val combinedPosition = "${item.posX} - ${item.posY}"
+                emit(Resource.Success(combinedPosition))
+                delay(3000)
+            }
+
         } catch (e: Exception) {
             emit(Resource.Error(e.localizedMessage ?: "Error."))
         }
