@@ -31,14 +31,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             Satellites2Theme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = Destination.HomeScreen.route){
-
-                    composable(Destination.HomeScreen.route){
-
+                NavHost(
+                        navController = navController,
+                        startDestination = Destination.HomeScreen.route) {
+                    composable(Destination.HomeScreen.route) {
                         HomeScreen(navController = navController)
                     }
-
-                    composable(Destination.DetailScreen.route){
+                    composable(Destination.DetailScreen.route) {
                         DetailScreen()
                     }
                 }

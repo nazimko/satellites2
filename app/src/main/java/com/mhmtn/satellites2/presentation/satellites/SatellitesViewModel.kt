@@ -24,32 +24,37 @@ class SatellitesViewModel @Inject constructor(
     private val _state = MutableStateFlow(SatellitesState())
     val state: StateFlow<SatellitesState> = _state.asStateFlow()
 
-
     init {
         getSatellites()
     }
 
     private fun getSatellites() = viewModelScope.launch {
-        useCase.executeGetSatellites().onStart {
-            _state.update { it.copy(isLoading = true) }
-        }.collect { resource ->
+        _state.update { it.copy(isLoading = true) }
+        useCase.executeGetSatellites().collect { resource ->
             when (resource) {
                 is Resource.Error -> {
-                    _state.update { it.copy(error = resource.message.orEmpty(), isLoading = false) }
+                    _state.update {
+                        it.copy(
+                                error = resource.message.orEmpty(),
+                                isLoading = false)
+                    }
                 }
 
                 is Resource.Success -> {
-                    _state.update { it.copy(satellites = resource.data.orEmpty(), isLoading = false) }
+                    _state.update {
+                        it.copy(
+                                satellites = resource.data.orEmpty(),
+                                isLoading = false)
+                    }
                 }
             }
         }
     }
 
     fun startSearch(searchString: String) = viewModelScope.launch {
+        _state.update { it.copy(isLoading = true) }
         searchUseCase.executeSearchSatellite(searchString)
-                .onStart {
-                    _state.update { it.copy(isLoading = true) }
-                }.collect { list ->
+                .collect { list ->
                     _state.update { it.copy(satellites = list, isLoading = false) }
                 }
     }

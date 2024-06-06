@@ -40,28 +40,22 @@ fun HomeScreen(
         navController: NavController,
         viewModel: SatellitesViewModel = hiltViewModel()
 ) {
-
     val state by viewModel.state.collectAsState()
-
-    Box(
-            modifier = Modifier
-                    .fillMaxSize()
-                    .background(Gray80),
+    Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Gray80),
             contentAlignment = Alignment.TopCenter
     ) {
-
         Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             SearchBar(modifier = Modifier
                     .background(color = Gray80)
-                    .padding(16.dp), onSearch = { searchKey ->
-                viewModel.startSearch(searchString = searchKey)
-            }, onValueChange = { searchKey ->
-                viewModel.updateSearchKey(searchKey)
-            }, searchKey = state.searchKey)
+                    .padding(16.dp),
+                    onSearch = viewModel::startSearch,
+                    onValueChange = viewModel::updateSearchKey,
+                    searchKey = state.searchKey)
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(state.satellites) {
@@ -81,7 +75,6 @@ fun HomeScreen(
                             .padding(12.dp)
                             .align(Alignment.Center))
         }
-
 
         if (state.isLoading) {
             CircularProgressIndicator()
