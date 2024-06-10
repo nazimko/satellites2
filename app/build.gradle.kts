@@ -21,6 +21,11 @@ android {
             useSupportLibrary = true
         }
     }
+    kapt {
+        arguments {
+            arg("room.schemaLocation", "$projectDir/schemas".toString())
+        }
+    }
 
     buildTypes {
         release {
@@ -49,7 +54,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
+
 
 dependencies {
 
@@ -76,5 +83,14 @@ dependencies {
 
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation ("androidx.navigation:navigation-compose:2.7.7")
+
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation ("androidx.room:room-ktx:$room_version")
+
+    implementation(libs.androidx.material3)
 
 }

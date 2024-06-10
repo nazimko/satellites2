@@ -6,5 +6,5 @@ data class SatellitesState(
         val isLoading: Boolean = false,
         var satellites: List<SatellitesItem> = emptyList(),
         val error: String = "",
-        val searchKey: String = " "
+        var searchKey: String = ""
 )

@@ -66,6 +66,7 @@ fun DetailScreen(
                     Text(text = "(${position.position})")
                 }
             }
+
         }
 
         if (state.error.isNotBlank()){
