@@ -36,7 +36,6 @@ class DetailViewModel @Inject constructor(
     private val useCase: GetSatelliteDetailUseCase,
     private val positionsUseCase: GetPositionsUseCase,
     private val stateHandle: SavedStateHandle,
-    @SuppressLint("StaticFieldLeak") private val context: Context
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(DetailState())
@@ -48,10 +47,6 @@ class DetailViewModel @Inject constructor(
     private val _positionState = MutableStateFlow(PositionState())
     val positionState: StateFlow<PositionState> = _positionState.asStateFlow()
 
-    private val sharedPreferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
-    private val isSaved = sharedPreferences.getBoolean("isSaved",false)
-    private val id= sharedPreferences.getInt("id",0)
-
     init {
         stateHandle.get<String>(SatelliteID)?.let {
             getPositions(it.toInt())
@@ -59,6 +54,7 @@ class DetailViewModel @Inject constructor(
         }
         _name.value = stateHandle.get<String>(SatelliteName).toString()
     }
+
     private fun getSatelliteDetail(id: Int) = viewModelScope.launch {
         useCase.executeGetSatelliteDetail(id = id).onStart {
             _state.update { it.copy(isLoading = true) }
@@ -67,20 +63,14 @@ class DetailViewModel @Inject constructor(
                 is Resource.Error -> {
                     _state.update { it.copy(error = res.message.orEmpty(), isLoading = false) }
                 }
+
                 is Resource.Success -> {
-                    if (isSaved && id==this@DetailViewModel.id){
-                        _state.update { it.copy(satellite = getDataFromDB(id), isLoading = false) }
-                    } else {
-                        _state.update { it.copy(satellite = res.data!!, isLoading = false) }
-                        store(res.data!!)
-                        sharedPreferences.edit().putBoolean("isSaved",true).apply()
-                        sharedPreferences.edit().putInt("id",id).apply()
-                        Toast.makeText(context,"Data From API",Toast.LENGTH_LONG).show()
-                    }
+                    _state.update { it.copy(satellite = res.data!!, isLoading = false) }
                 }
             }
         }
     }
+
     private fun getPositions(id: Int) = viewModelScope.launch {
         positionsUseCase.executeGetPositions(id = id).onStart {
             _positionState.update { it.copy(isLoading = true) }
@@ -99,15 +89,5 @@ class DetailViewModel @Inject constructor(
                 }
             }
         }
-    }
-    private suspend fun store(satelliteDetail : SatelliteDetailItem){
-        val dao = SatelliteDatabase(context = context).satelliteDao()
-        dao.insertSatellite(satelliteDetail)
-        Toast.makeText(context,"Saved to DB",Toast.LENGTH_LONG).show()
-    }
-    private suspend fun getDataFromDB (id:Int) : SatelliteDetailItem? {
-        val detailItem = SatelliteDatabase(context).satelliteDao().getSatellite(id)
-        Toast.makeText(context,"Data From DB",Toast.LENGTH_LONG).show()
-        return detailItem
     }
 }
