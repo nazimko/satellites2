@@ -15,20 +15,15 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,7 +32,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.mhmtn.satellites2.presentation.satellites.SatellitesEvent
 import com.mhmtn.satellites2.presentation.satellites.SatellitesViewModel
 import com.mhmtn.satellites2.presentation.theme.Gray80
 
@@ -47,11 +41,9 @@ fun HomeScreen(
         viewModel: SatellitesViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    var search by remember { mutableStateOf(state.searchKey) }
-
     Box(modifier = Modifier
-        .fillMaxSize()
-        .background(Gray80),
+            .fillMaxSize()
+            .background(Gray80),
             contentAlignment = Alignment.TopCenter
     ) {
         Column(
@@ -59,20 +51,20 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SearchBar(modifier = Modifier
-                .background(color = Gray80)
-                .padding(16.dp),
+                    .background(color = Gray80)
+                    .padding(16.dp),
                     onSearch = {
-                               viewModel.onEvent(event = SatellitesEvent.Search(it))
+                        viewModel.makeSearch(key = it)
                     },
                     onValueChange = {
-                                    search = it
+                        viewModel.updateSearchKey(it)
                     },
-                    searchKey = search)
+                    searchKey = state.searchKey)
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(state.satellites) {
                     SatelliteRow(navController = navController, satellite = it)
-                    HorizontalDivider(thickness = 0.75.dp,color = Color.Black)
+                    HorizontalDivider(thickness = 0.75.dp, color = Color.Black)
                 }
             }
         }
@@ -83,9 +75,9 @@ fun HomeScreen(
                     color = Color.Red,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp)
-                        .align(Alignment.Center))
+                            .fillMaxWidth()
+                            .padding(12.dp)
+                            .align(Alignment.Center))
         }
         if (state.isLoading) {
             CircularProgressIndicator()
@@ -103,27 +95,27 @@ fun SearchBar(
 
     Box(modifier = modifier) {
         TextField(value = searchKey, onValueChange = onValueChange,
-            keyboardActions = KeyboardActions(onDone = { onSearch(searchKey) }),
-            maxLines = 1,
-            singleLine = true,
-            textStyle = TextStyle(color = MaterialTheme.colorScheme.tertiary),
-            shape = RoundedCornerShape(12.dp),
-            placeholder = {Text(text = "Search")},
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp, vertical = 6.dp)
-                .background(color = Color.White, CircleShape),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-                disabledContainerColor = Color.White
-            ),
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "Search Icon"
-                )
-            }
+                keyboardActions = KeyboardActions(onDone = { onSearch(searchKey) }),
+                maxLines = 1,
+                singleLine = true,
+                textStyle = TextStyle(color = MaterialTheme.colorScheme.tertiary),
+                shape = RoundedCornerShape(12.dp),
+                placeholder = { Text(text = "Search") },
+                modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp, vertical = 6.dp)
+                        .background(color = Color.White, CircleShape),
+                colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        disabledContainerColor = Color.White
+                ),
+                leadingIcon = {
+                    Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "Search Icon"
+                    )
+                }
         )
     }
 }
