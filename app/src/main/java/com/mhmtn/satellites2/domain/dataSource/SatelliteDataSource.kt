@@ -1,18 +1,18 @@
 package com.mhmtn.satellites2.domain.dataSource
 
 import android.content.Context
-import androidx.compose.runtime.rememberCoroutineScope
 import com.mhmtn.satellites2.data.model.DataList
 import com.mhmtn.satellites2.util.parseJsonToModel
 import com.mhmtn.satellites2.data.model.SatelliteDetailItem
 import com.mhmtn.satellites2.data.model.SatellitesItem
-import com.mhmtn.satellites2.presentation.satellite_detail.PositionState
 import com.mhmtn.satellites2.util.Constants.POSITIONS
 import com.mhmtn.satellites2.util.Constants.SATELLITES
 import com.mhmtn.satellites2.util.Constants.SATELLITE_DETAIL
 import com.mhmtn.satellites2.util.Resource
 import com.mhmtn.satellites2.util.getItemById
 import com.mhmtn.satellites2.util.readJsonFromAssets
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,6 +23,8 @@ import javax.inject.Inject
 class SatelliteDataSource @Inject constructor(
         private val context: Context
 ) {
+
+    private val scope = CoroutineScope(Dispatchers.Default)
 
     suspend fun getSatellites(): Flow<Resource<List<SatellitesItem>>> = flow {
         try {
@@ -46,7 +48,7 @@ class SatelliteDataSource @Inject constructor(
         emit(result)
     }
 
-    suspend fun getPositions(id: Int): Flow<Resource<String>> = flow {
+    suspend fun getPositions(id: Int): Flow<Resource<String>> = flow<Resource<String>> {
         try {
             val response = context.readJsonFromAssets(POSITIONS)
             val positionItems = parseJsonToModel<DataList>(response)
@@ -62,5 +64,5 @@ class SatelliteDataSource @Inject constructor(
         } catch (e: Exception) {
             emit(Resource.Error(e.localizedMessage ?: "Error."))
         }
-    }
+    }.stateIn(scope, SharingStarted.WhileSubscribed(3000),Resource.Success(""))
 }

@@ -1,4 +1,4 @@
-package com.mhmtn.satellites2.presentation.satellite_detail.views
+package com.mhmtn.satellites2.presentation.satelliteDetail.views
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

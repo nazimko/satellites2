@@ -10,6 +10,5 @@ import javax.inject.Inject
 
 @Database(entities = [SatelliteDetailItem::class], version = 1)
 abstract class SatelliteDatabase : RoomDatabase() {
-
     abstract fun satelliteDao():SatelliteDao
 }

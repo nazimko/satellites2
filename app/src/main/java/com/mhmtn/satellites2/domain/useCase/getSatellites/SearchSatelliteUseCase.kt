@@ -1,4 +1,4 @@
-package com.mhmtn.satellites2.domain.use_case.get_satellites
+package com.mhmtn.satellites2.domain.useCase.getSatellites
 
 import com.mhmtn.satellites2.data.model.SatellitesItem
 import com.mhmtn.satellites2.util.Resource

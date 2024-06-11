@@ -1,6 +1,5 @@
-package com.mhmtn.satellites2.presentation.satellite_detail.views
+package com.mhmtn.satellites2.presentation.satelliteDetail.views
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,12 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,10 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mhmtn.satellites2.data.model.PositionsItem
-import com.mhmtn.satellites2.presentation.satellite_detail.DetailViewModel
+import com.mhmtn.satellites2.presentation.satelliteDetail.DetailViewModel
 import com.mhmtn.satellites2.presentation.theme.Gray80
-import com.mhmtn.satellites2.util.Resource
 
 @Composable
 fun DetailScreen(
@@ -39,8 +32,6 @@ fun DetailScreen(
 ) {
 
     val state by viewModel.state.collectAsState()
-    //val name by viewModel.name.collectAsState()
-   // val position by viewModel.positionState.collectAsState()
 
     Box(
         modifier = Modifier
@@ -48,7 +39,7 @@ fun DetailScreen(
             .background(color = Gray80),
         contentAlignment = Alignment.Center
     ) {
-        state.detailState.satellite?.let {
+        state.satellite?.let {
             Column( verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -63,16 +54,15 @@ fun DetailScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 Row {
                     Text(text = "Last Position: " , fontWeight = FontWeight.Bold)
-                    Text(text = "(${state.positionState.position})")
-                   // Text(text = "(${position.position})")
+                    Text(text = "(${state.position})")
                 }
             }
 
         }
 
-        if (state.detailState.error.isNotBlank()){
+        if (state.error.isNotBlank()){
             Text(
-                text = state.detailState.error,
+                text = state.error,
                 color = Color.Red,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -81,7 +71,7 @@ fun DetailScreen(
                     .align(Alignment.Center))
         }
 
-        if (state.detailState.isLoading){
+        if (state.isLoading){
             CircularProgressIndicator()
         }
     }

@@ -2,9 +2,8 @@ package com.mhmtn.satellites2.presentation.satellites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mhmtn.satellites2.data.model.SatellitesItem
-import com.mhmtn.satellites2.domain.use_case.get_satellites.GetSatelliteUseCase
-import com.mhmtn.satellites2.domain.use_case.get_satellites.SearchSatelliteUseCase
+import com.mhmtn.satellites2.domain.useCase.getSatellites.GetSatelliteUseCase
+import com.mhmtn.satellites2.domain.useCase.getSatellites.SearchSatelliteUseCase
 import com.mhmtn.satellites2.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
