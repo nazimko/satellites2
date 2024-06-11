@@ -10,8 +10,6 @@ import com.mhmtn.satellites2.domain.dataSource.SatelliteLocalDataSource
 import com.mhmtn.satellites2.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 
 class SatelliteRepoImpl @Inject constructor(
         private val dataSource: SatelliteDataSource,

@@ -1,10 +1,12 @@
 package com.mhmtn.satellites2.domain.dataSource
 
 import android.content.Context
+import androidx.compose.runtime.rememberCoroutineScope
 import com.mhmtn.satellites2.data.model.DataList
 import com.mhmtn.satellites2.util.parseJsonToModel
 import com.mhmtn.satellites2.data.model.SatelliteDetailItem
 import com.mhmtn.satellites2.data.model.SatellitesItem
+import com.mhmtn.satellites2.presentation.satellite_detail.PositionState
 import com.mhmtn.satellites2.util.Constants.POSITIONS
 import com.mhmtn.satellites2.util.Constants.SATELLITES
 import com.mhmtn.satellites2.util.Constants.SATELLITE_DETAIL
@@ -13,7 +15,9 @@ import com.mhmtn.satellites2.util.getItemById
 import com.mhmtn.satellites2.util.readJsonFromAssets
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 class SatelliteDataSource @Inject constructor(
@@ -48,12 +52,13 @@ class SatelliteDataSource @Inject constructor(
             val positionItems = parseJsonToModel<DataList>(response)
             val position = positionItems.list.find { it.id == id.toString() }
             val randomPosition = position?.positions!!
-            for (item in randomPosition) {
-                val combinedPosition = "${item.posX} - ${item.posY}"
-                emit(Resource.Success(combinedPosition))
-                delay(3000)
+            while (true) {
+                for (item in randomPosition) {
+                    val combinedPosition = "${item.posX} - ${item.posY}"
+                    emit(Resource.Success(combinedPosition))
+                    delay(3000)
+                }
             }
-
         } catch (e: Exception) {
             emit(Resource.Error(e.localizedMessage ?: "Error."))
         }

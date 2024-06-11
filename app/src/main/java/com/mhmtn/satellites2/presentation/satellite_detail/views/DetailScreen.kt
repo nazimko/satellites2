@@ -39,8 +39,8 @@ fun DetailScreen(
 ) {
 
     val state by viewModel.state.collectAsState()
-    val name by viewModel.name.collectAsState()
-    val position by viewModel.positionState.collectAsState()
+    //val name by viewModel.name.collectAsState()
+   // val position by viewModel.positionState.collectAsState()
 
     Box(
         modifier = Modifier
@@ -48,13 +48,13 @@ fun DetailScreen(
             .background(color = Gray80),
         contentAlignment = Alignment.Center
     ) {
-        state.satellite?.let {
+        state.detailState.satellite?.let {
             Column( verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
                     .background(color = Gray80)) {
-                Text(text = name, fontWeight = FontWeight.Bold, fontSize = 32.sp)
+                Text(text = state.name, fontWeight = FontWeight.Bold, fontSize = 32.sp)
                 Text(text = it.first_flight, fontWeight = FontWeight.Thin)
                 Spacer(modifier = Modifier.height(48.dp))
                 DetailRow(text = "Height/Mass:", detail1 = it.height, detail2 = it.mass)
@@ -63,15 +63,16 @@ fun DetailScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 Row {
                     Text(text = "Last Position: " , fontWeight = FontWeight.Bold)
-                    Text(text = "(${position.position})")
+                    Text(text = "(${state.positionState.position})")
+                   // Text(text = "(${position.position})")
                 }
             }
 
         }
 
-        if (state.error.isNotBlank()){
+        if (state.detailState.error.isNotBlank()){
             Text(
-                text = state.error,
+                text = state.detailState.error,
                 color = Color.Red,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -80,7 +81,7 @@ fun DetailScreen(
                     .align(Alignment.Center))
         }
 
-        if (state.isLoading){
+        if (state.detailState.isLoading){
             CircularProgressIndicator()
         }
     }

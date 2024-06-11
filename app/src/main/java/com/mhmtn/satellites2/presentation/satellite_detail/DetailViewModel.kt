@@ -38,34 +38,40 @@ class DetailViewModel @Inject constructor(
     private val stateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(DetailState())
-    val state: StateFlow<DetailState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(CombinedState())
+    val state: StateFlow<CombinedState> = _state.asStateFlow()
 
+    /*
     private val _name = MutableStateFlow("")
     val name: StateFlow<String> = _name.asStateFlow()
 
     private val _positionState = MutableStateFlow(PositionState())
     val positionState: StateFlow<PositionState> = _positionState.asStateFlow()
 
+ */
+
     init {
         stateHandle.get<String>(SatelliteID)?.let {
             getPositions(it.toInt())
             getSatelliteDetail(it.toInt())
         }
-        _name.value = stateHandle.get<String>(SatelliteName).toString()
+        _state.value.name= stateHandle.get<String>(SatelliteName).toString()
     }
 
     private fun getSatelliteDetail(id: Int) = viewModelScope.launch {
         useCase.executeGetSatelliteDetail(id = id).onStart {
-            _state.update { it.copy(isLoading = true) }
+            _state.update { it.copy(detailState = DetailState(isLoading = true)) }
         }.collect { res ->
             when (res) {
                 is Resource.Error -> {
-                    _state.update { it.copy(error = res.message.orEmpty(), isLoading = false) }
+                    //_state.value.detailState = _state.value.detailState.copy(error = res.message.orEmpty(), isLoading = false)
+                    _state.update { it.copy(DetailState(error = res.message.orEmpty(), isLoading = false)) }
                 }
 
                 is Resource.Success -> {
-                    _state.update { it.copy(satellite = res.data!!, isLoading = false) }
+                    _state.update {
+                        it.copy(detailState = DetailState(satellite = res.data!!, isLoading = false))
+                    }
                 }
             }
         }
@@ -73,19 +79,16 @@ class DetailViewModel @Inject constructor(
 
     private fun getPositions(id: Int) = viewModelScope.launch {
         positionsUseCase.executeGetPositions(id = id).onStart {
-            _positionState.update { it.copy(isLoading = true) }
+            _state.update { it.copy(positionState = PositionState(isLoading = true)) }
+            //_positionState.update { it.copy(isLoading = true) }
         }.collect { res ->
             when (res) {
                 is Resource.Error -> {
-                    _positionState.update {
-                        it.copy(
-                            error = res.message.orEmpty(),
-                            isLoading = false
-                        )
-                    }
+                    _state.update { it.copy(positionState = PositionState(error = res.message.orEmpty(), isLoading = false)) }
                 }
                 is Resource.Success -> {
-                    _positionState.update { it.copy(position = res.data!!, isLoading = false) }
+                    //_state.value.positionState = _state.value.positionState.copy(position = res.data!!, isLoading = false)
+                    _state.update { it.copy(positionState = PositionState(position = res.data!!, isLoading = false)) }
                 }
             }
         }
