@@ -2,10 +2,14 @@ package com.mhmtn.satellites2.data.di
 
 import android.app.Application
 import android.content.Context
+import androidx.room.Room
 import com.google.gson.Gson
+import com.mhmtn.satellites2.data.database.SatelliteDao
+import com.mhmtn.satellites2.data.database.SatelliteDatabase
 import com.mhmtn.satellites2.data.model.SatellitesItem
 import com.mhmtn.satellites2.data.repo.SatelliteRepoImpl
 import com.mhmtn.satellites2.domain.dataSource.SatelliteDataSource
+import com.mhmtn.satellites2.domain.dataSource.SatelliteLocalDataSource
 import com.mhmtn.satellites2.domain.repo.SatelliteRepo
 import com.mhmtn.satellites2.domain.use_case.get_satellites.SearchSatelliteUseCase
 import dagger.Module
@@ -26,12 +30,27 @@ object AppModule {
     }
 
     @Provides
+    fun provideSatelliteDao(satelliteDB : SatelliteDatabase): SatelliteDao{
+        return satelliteDB.satelliteDao()
+    }
+
+    @Provides
     @Singleton
-    fun providesSatelliteRepo(dataSource: SatelliteDataSource) : SatelliteRepo{
-        return SatelliteRepoImpl(dataSource)
+    fun providesSatelliteRepo(dataSource: SatelliteDataSource, localDataSource: SatelliteLocalDataSource) : SatelliteRepo{
+        return SatelliteRepoImpl(dataSource,localDataSource)
     }
 
     @Provides
     @Singleton
     fun provideContext (application: Application): Context = application.applicationContext
+
+    @Provides
+    @Singleton
+    fun provideSatelliteDB (@ApplicationContext context: Context):SatelliteDatabase {
+        return Room.databaseBuilder(
+            context,
+            SatelliteDatabase::class.java,
+            "satelliteDB"
+        ).build()
+    }
 }

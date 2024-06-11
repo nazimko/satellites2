@@ -12,20 +12,4 @@ import javax.inject.Inject
 abstract class SatelliteDatabase : RoomDatabase() {
 
     abstract fun satelliteDao():SatelliteDao
-
-    companion object {
-       @Volatile private var instance : SatelliteDatabase ? = null
-
-        private val lock = Any()
-
-        operator fun invoke(context: Context) = instance ?: synchronized(lock){
-            instance ?: makeDatabase(context = context).also {
-                instance = it
-            }
-        }
-
-        private fun makeDatabase (context: Context) = Room.databaseBuilder(
-            context.applicationContext,SatelliteDatabase::class.java,"satelliteDB"
-        ).build()
-    }
 }
