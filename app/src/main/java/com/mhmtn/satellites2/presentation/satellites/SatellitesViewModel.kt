@@ -33,13 +33,11 @@ class SatellitesViewModel @Inject constructor(
         }.collect { resource ->
             when (resource) {
                 is Resource.Error -> {
-                    _state.update { it.copy(error = resource.message.orEmpty(), isLoading = false) }
+                    updateUiState { copy(error = resource.message.orEmpty(), isLoading = false) }
                 }
 
                 is Resource.Success -> {
-                    _state.update {
-                        it.copy(satellites = resource.data.orEmpty(), isLoading = false)
-                    }
+                    updateUiState { copy(satellites = resource.data!!, isLoading = false) }
                 }
             }
         }
@@ -47,13 +45,15 @@ class SatellitesViewModel @Inject constructor(
 
     fun makeSearch(key: String) = viewModelScope.launch {
         searchUseCase.executeSearchSatellite(key).onStart {
-            _state.update { it.copy(isLoading = true) }
+            updateUiState { copy(isLoading = true) }
         }.collect { list ->
-            _state.update { it.copy(satellites = list, isLoading = false) }
+            updateUiState { copy(satellites = list, isLoading = false) }
         }
     }
 
-    fun updateSearchKey(key: String) {
-        _state.value = _state.value.copy(searchKey = key)
+    fun updateSearchKey(key: String) = updateUiState { copy(searchKey = key) }
+
+    private fun updateUiState(uiState: SatellitesState.() -> SatellitesState) {
+        _state.update(uiState)
     }
 }
