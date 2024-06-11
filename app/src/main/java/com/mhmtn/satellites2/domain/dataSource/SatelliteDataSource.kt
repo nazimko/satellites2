@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class SatelliteDataSource @Inject constructor(
-    private val context : Context
+        private val context: Context
 ) {
 
     suspend fun getSatellites(): Flow<Resource<List<SatellitesItem>>> = flow {
@@ -30,15 +30,16 @@ class SatelliteDataSource @Inject constructor(
     }
 
     suspend fun getSatelliteDetail(id: Int): Flow<Resource<SatelliteDetailItem?>> = flow {
-        try {
+        val result = try {
             val response = context.readJsonFromAssets(SATELLITE_DETAIL)
-            val item = getItemById(parseJsonToModel<List<SatelliteDetailItem>>(response), id){
+            val item = getItemById(parseJsonToModel<List<SatelliteDetailItem>>(response), id) {
                 it.id
             }
-            emit(Resource.Success(item))
+            Resource.Success(item)
         } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage ?: "Error."))
+            Resource.Error(e.localizedMessage ?: "Error.")
         }
+        emit(result)
     }
 
     suspend fun getPositions(id: Int): Flow<Resource<String>> = flow {
@@ -46,8 +47,8 @@ class SatelliteDataSource @Inject constructor(
             val response = context.readJsonFromAssets(POSITIONS)
             val positionItems = parseJsonToModel<DataList>(response)
             val position = positionItems.list.find { it.id == id.toString() }
-            val randomPosition =  position?.positions!!
-            for (item in randomPosition){
+            val randomPosition = position?.positions!!
+            for (item in randomPosition) {
                 val combinedPosition = "${item.posX} - ${item.posY}"
                 emit(Resource.Success(combinedPosition))
                 delay(3000)

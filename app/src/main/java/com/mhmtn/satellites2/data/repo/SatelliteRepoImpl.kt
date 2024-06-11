@@ -11,21 +11,23 @@ import com.mhmtn.satellites2.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class SatelliteRepoImpl @Inject constructor(
         private val dataSource: SatelliteDataSource,
         private val localDataSource: SatelliteLocalDataSource
 ) : SatelliteRepo {
-    override suspend fun getSatellites(): Flow<Resource<List<SatellitesItem>>       > {
+    override suspend fun getSatellites(): Flow<Resource<List<SatellitesItem>>> {
         return dataSource.getSatellites()
     }
 
-    override suspend fun getSatelliteDetail(id: Int): Flow<Resource<SatelliteDetailItem?>> = flow {
-        if (localDataSource.checkItemIsExist(id).first()) {
-            Resource.Success(localDataSource.getSatellite(id))
+    override suspend fun getSatelliteDetail(id: Int): Flow<Resource<SatelliteDetailItem?>> {
+        return if (localDataSource.checkItemIsExist(id).first()) {
+            localDataSource.getSatellite(id)
         } else {
-            dataSource.getSatelliteDetail(id)
-            localDataSource.insertSatellite(dataSource.getSatelliteDetail(id).first().data!!)
+            dataSource.getSatelliteDetail(id).also {
+                localDataSource.insertSatellite(it.first().data!!)
+            }
         }
     }
 
