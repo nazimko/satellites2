@@ -2,7 +2,6 @@ package com.mhmtn.satellites2.domain.dataSource
 
 import android.content.Context
 import com.mhmtn.satellites2.data.model.DataList
-import com.mhmtn.satellites2.util.parseJsonToModel
 import com.mhmtn.satellites2.data.model.SatelliteDetailItem
 import com.mhmtn.satellites2.data.model.SatellitesItem
 import com.mhmtn.satellites2.util.Constants.POSITIONS
@@ -10,28 +9,22 @@ import com.mhmtn.satellites2.util.Constants.SATELLITES
 import com.mhmtn.satellites2.util.Constants.SATELLITE_DETAIL
 import com.mhmtn.satellites2.util.Resource
 import com.mhmtn.satellites2.util.getItemById
+import com.mhmtn.satellites2.util.parseJsonToModel
 import com.mhmtn.satellites2.util.readJsonFromAssets
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 class SatelliteDataSource @Inject constructor(
         private val context: Context
 ) {
-
-    private val scope = CoroutineScope(Dispatchers.Default)
-
     suspend fun getSatellites(): Flow<Resource<List<SatellitesItem>>> = flow {
         try {
             val response = context.readJsonFromAssets(SATELLITES)
             emit(Resource.Success(parseJsonToModel<List<SatellitesItem>>(response)))
         } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage ?: "Error."))
+            emit(Resource.Error(e.localizedMessage.orEmpty()))
         }
     }
 
@@ -43,12 +36,12 @@ class SatelliteDataSource @Inject constructor(
             }
             Resource.Success(item)
         } catch (e: Exception) {
-            Resource.Error(e.localizedMessage ?: "Error.")
+            Resource.Error(e.localizedMessage.orEmpty())
         }
         emit(result)
     }
 
-    suspend fun getPositions(id: Int): Flow<Resource<String>> = flow<Resource<String>> {
+    suspend fun getPositions(id: Int): Flow<Resource<String>> = flow {
         try {
             val response = context.readJsonFromAssets(POSITIONS)
             val positionItems = parseJsonToModel<DataList>(response)
@@ -62,7 +55,7 @@ class SatelliteDataSource @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            emit(Resource.Error(e.localizedMessage ?: "Error."))
+            emit(Resource.Error(e.localizedMessage.orEmpty()))
         }
-    }.stateIn(scope, SharingStarted.WhileSubscribed(3000),Resource.Success(""))
+    }
 }
