@@ -27,8 +27,8 @@ import com.mhmtn.satellites2.presentation.theme.Gray80
 
 @Composable
 fun SatelliteRow(
-    navController: NavController,
-    satellite: SatellitesItem
+    satellite: SatellitesItem,
+    onNavigate : (String) -> Unit
 ) {
 
     Row(horizontalArrangement = Arrangement.SpaceEvenly,
@@ -38,11 +38,11 @@ fun SatelliteRow(
             .fillMaxWidth()
             .padding(4.dp)
             .clickable {
-                navController.navigate(
+                onNavigate(
                     Destination.DetailScreen.createRoute(
                         satellite.id,
                         satellite.name
-                    )
+                )
                 )
             }) {
         Canvas(

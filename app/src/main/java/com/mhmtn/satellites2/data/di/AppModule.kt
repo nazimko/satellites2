@@ -48,6 +48,7 @@ object AppModule {
             context,
             SatelliteDatabase::class.java,
             "satelliteDB"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .allowMainThreadQueries().build()
     }
 }

@@ -2,7 +2,8 @@ package com.mhmtn.satellites2.domain.dataSource
 
 import android.content.Context
 import com.mhmtn.satellites2.data.model.DataList
-import com.mhmtn.satellites2.data.model.SatelliteDetailItem
+import com.mhmtn.satellites2.util.parseJsonToModel
+import com.mhmtn.satellites2.data.model.SatelliteDetailEntity
 import com.mhmtn.satellites2.data.model.SatellitesItem
 import com.mhmtn.satellites2.util.Constants.POSITIONS
 import com.mhmtn.satellites2.util.Constants.SATELLITES
@@ -28,10 +29,10 @@ class SatelliteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getSatelliteDetail(id: Int): Flow<Resource<SatelliteDetailItem?>> = flow {
+    suspend fun getSatelliteDetail(id: Int): Flow<Resource<SatelliteDetailEntity?>> = flow {
         val result = try {
             val response = context.readJsonFromAssets(SATELLITE_DETAIL)
-            val item = getItemById(parseJsonToModel<List<SatelliteDetailItem>>(response), id) {
+            val item = getItemById(parseJsonToModel<List<SatelliteDetailEntity>>(response), id) {
                 it.id
             }
             Resource.Success(item)

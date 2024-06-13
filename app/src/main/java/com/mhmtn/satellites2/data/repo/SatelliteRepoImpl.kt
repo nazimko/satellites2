@@ -1,7 +1,6 @@
 package com.mhmtn.satellites2.data.repo
 
-import com.mhmtn.satellites2.data.model.PositionsItem
-import com.mhmtn.satellites2.data.model.SatelliteDetailItem
+import com.mhmtn.satellites2.data.model.SatelliteDetailEntity
 import com.mhmtn.satellites2.data.model.SatellitesItem
 import com.mhmtn.satellites2.domain.repo.SatelliteRepo
 import javax.inject.Inject
@@ -18,8 +17,7 @@ class SatelliteRepoImpl @Inject constructor(
     override suspend fun getSatellites(): Flow<Resource<List<SatellitesItem>>> {
         return dataSource.getSatellites()
     }
-
-    override suspend fun getSatelliteDetail(id: Int): Flow<Resource<SatelliteDetailItem?>> {
+    override suspend fun getSatelliteDetail(id: Int): Flow<Resource<SatelliteDetailEntity?>> {
         return if (localDataSource.checkItemIsExist(id).first()) {
             localDataSource.getSatellite(id)
         } else {
@@ -28,7 +26,6 @@ class SatelliteRepoImpl @Inject constructor(
             }
         }
     }
-
     override suspend fun getPositions(id: Int): Flow<Resource<String>> {
         return dataSource.getPositions(id)
     }

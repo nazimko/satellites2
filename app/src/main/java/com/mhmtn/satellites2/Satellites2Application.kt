@@ -7,18 +7,4 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class Satellites2Application : Application() {
-
-    /*
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        private lateinit var context: Context
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        context = applicationContext
-    }
-
-     */
-
 }

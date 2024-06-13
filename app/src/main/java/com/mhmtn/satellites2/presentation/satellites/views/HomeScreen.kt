@@ -22,28 +22,31 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.mhmtn.satellites2.presentation.satellites.SatellitesViewModel
+import com.mhmtn.satellites2.data.model.SatellitesItem
+import com.mhmtn.satellites2.presentation.satellites.SatellitesState
 import com.mhmtn.satellites2.presentation.theme.Gray80
-
 @Composable
 fun HomeScreen(
-        navController: NavController,
-        viewModel: SatellitesViewModel = hiltViewModel()
+        state : SatellitesState,
+        onNavigate : (String) -> Unit,
+        makeSearch : (String) -> Unit,
+        updateSearchKey : (String) -> Unit
 ) {
-    val state by viewModel.state.collectAsState()
+
     Box(modifier = Modifier
-            .fillMaxSize()
-            .background(Gray80),
+        .fillMaxSize()
+        .background(Gray80),
             contentAlignment = Alignment.TopCenter
     ) {
         Column(
@@ -51,20 +54,20 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SearchBar(modifier = Modifier
-                    .background(color = Gray80)
-                    .padding(16.dp),
+                .background(color = Gray80)
+                .padding(16.dp),
                     onSearch = {
-                        viewModel.makeSearch(key = it)
+                               makeSearch(it)
                     },
                     onValueChange = {
-                        viewModel.updateSearchKey(it)
+                                    updateSearchKey(it)
                     },
                     searchKey = state.searchKey)
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(state.satellites) {
-                    SatelliteRow(navController = navController, satellite = it)
-                    HorizontalDivider(thickness = 0.75.dp, color = Color.Black)
+                    SatelliteRow(satellite = it, onNavigate = onNavigate )
+                    HorizontalDivider(thickness = 0.75.dp,color = Color.Black)
                 }
             }
         }
@@ -75,9 +78,9 @@ fun HomeScreen(
                     color = Color.Red,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp)
-                            .align(Alignment.Center))
+                        .fillMaxWidth()
+                        .padding(12.dp)
+                        .align(Alignment.Center))
         }
         if (state.isLoading) {
             CircularProgressIndicator()
@@ -95,27 +98,46 @@ fun SearchBar(
 
     Box(modifier = modifier) {
         TextField(value = searchKey, onValueChange = onValueChange,
-                keyboardActions = KeyboardActions(onDone = { onSearch(searchKey) }),
-                maxLines = 1,
-                singleLine = true,
-                textStyle = TextStyle(color = MaterialTheme.colorScheme.tertiary),
-                shape = RoundedCornerShape(12.dp),
-                placeholder = { Text(text = "Search") },
-                modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 10.dp, vertical = 6.dp)
-                        .background(color = Color.White, CircleShape),
-                colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        disabledContainerColor = Color.White
-                ),
-                leadingIcon = {
-                    Icon(
-                            imageVector = Icons.Filled.Search,
-                            contentDescription = "Search Icon"
-                    )
-                }
+            keyboardActions = KeyboardActions(onDone = { onSearch(searchKey) }),
+            maxLines = 1,
+            singleLine = true,
+            textStyle = TextStyle(color = MaterialTheme.colorScheme.tertiary),
+            shape = RoundedCornerShape(12.dp),
+            placeholder = {Text(text = "Search")},
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp, vertical = 6.dp)
+                .background(color = Color.White, CircleShape),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                disabledContainerColor = Color.White
+            ),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "Search Icon"
+                )
+            }
         )
     }
 }
+
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview(
+) {
+    HomeScreen(
+        state = SatellitesState(
+            satellites = listOf(
+                SatellitesItem(active = true, id = 1, name = "Satellite1"),
+                SatellitesItem(active = false, id = 2, name = "Satellite2"),
+                SatellitesItem(active = true, id = 3, name = "Satellite3")
+            )
+        ) ,
+        onNavigate = {},
+        makeSearch = {},
+        updateSearchKey = {})
+}
+

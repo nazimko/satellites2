@@ -4,7 +4,7 @@ import com.mhmtn.satellites2.data.model.SatellitesItem
 
 data class SatellitesState(
         val isLoading: Boolean = false,
-        var satellites: List<SatellitesItem> = emptyList(),
+        val satellites: List<SatellitesItem> = emptyList(),
         val error: String = "",
-        var searchKey: String = ""
+        val searchKey: String = ""
 )

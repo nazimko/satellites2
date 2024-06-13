@@ -92,5 +92,4 @@ dependencies {
     implementation ("androidx.room:room-ktx:$room_version")
 
     implementation(libs.androidx.material3)
-
 }

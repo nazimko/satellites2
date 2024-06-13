@@ -43,10 +43,16 @@ class DetailViewModel @Inject constructor(
                 is Resource.Error -> {
                     _state.update { it.copy(error = res.message.orEmpty(), isLoading = false) }
                 }
-
                 is Resource.Success -> {
+                    val data = res.data!!
                     _state.update {
-                        it.copy(satellite = res.data!!, isLoading = false)
+                        it.copy(
+                            satelliteId = data.id,
+                            height = data.height,
+                            mass = data.mass,
+                            costPerLaunch = data.costPerLaunch,
+                            firstFlight = data.firstFlight,
+                            isLoading = false)
                     }
                 }
             }

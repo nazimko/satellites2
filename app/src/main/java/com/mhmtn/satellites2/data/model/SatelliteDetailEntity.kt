@@ -3,13 +3,16 @@ package com.mhmtn.satellites2.data.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 @Entity
-data class SatelliteDetailItem(
+data class SatelliteDetailEntity(
     @ColumnInfo(name = "cost")
-    val cost_per_launch: Int,
+    @SerializedName("cost_per_launch")
+    val costPerLaunch: Int,
     @ColumnInfo(name = "firstFlight")
-    val first_flight: String,
+    @SerializedName("first_flight")
+    val firstFlight: String,
     @ColumnInfo(name = "height")
     val height: Int,
     @PrimaryKey
