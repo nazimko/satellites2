@@ -82,8 +82,8 @@ fun HomeScreenPreview(
         state = DetailState(
             name = "Satellite",
             height = 1000,
-            mass = 50000,
-            costPerLaunch = 120000,
+            mass = 10000,
+            costPerLaunch = 100000,
             firstFlight = "GG/AA/YYYY",
             position = "Latitude-Longitude"
         )

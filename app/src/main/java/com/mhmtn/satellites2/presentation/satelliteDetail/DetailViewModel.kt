@@ -29,7 +29,7 @@ class DetailViewModel @Inject constructor(
 
     init {
         stateHandle.get<String>(SatelliteID)?.let {
-            getPositions(it.toInt())
+           // getPositions(it.toInt())
             getSatelliteDetail(it.toInt())
         }
         _state.update { it.copy(name = stateHandle.get<String>(SatelliteName).toString()) }
@@ -52,6 +52,7 @@ class DetailViewModel @Inject constructor(
                             mass = data.mass,
                             costPerLaunch = data.costPerLaunch,
                             firstFlight = data.firstFlight,
+                            position = data.positions,
                             isLoading = false)
                     }
                 }
@@ -59,6 +60,7 @@ class DetailViewModel @Inject constructor(
         }
     }
 
+    /*
     private fun getPositions(id: Int) = viewModelScope.launch {
         positionsUseCase.executeGetPositions(id = id).onStart {
             _state.update { it.copy(isLoading = true) }
@@ -73,4 +75,6 @@ class DetailViewModel @Inject constructor(
             }
         }
     }
+
+     */
 }
