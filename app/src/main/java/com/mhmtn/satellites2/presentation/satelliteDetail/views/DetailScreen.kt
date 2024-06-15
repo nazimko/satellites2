@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,12 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.mhmtn.satellites2.data.model.SatellitesItem
 import com.mhmtn.satellites2.presentation.satelliteDetail.DetailState
-import com.mhmtn.satellites2.presentation.satelliteDetail.DetailViewModel
-import com.mhmtn.satellites2.presentation.satellites.SatellitesState
-import com.mhmtn.satellites2.presentation.satellites.views.HomeScreen
 import com.mhmtn.satellites2.presentation.theme.Gray80
 
 @Composable

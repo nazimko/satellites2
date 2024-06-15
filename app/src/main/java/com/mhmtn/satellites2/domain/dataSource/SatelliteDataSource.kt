@@ -2,7 +2,6 @@ package com.mhmtn.satellites2.domain.dataSource
 
 import android.content.Context
 import com.mhmtn.satellites2.data.model.DataList
-import com.mhmtn.satellites2.data.model.DetailModel
 import com.mhmtn.satellites2.util.parseJsonToModel
 import com.mhmtn.satellites2.data.model.SatelliteDetailEntity
 import com.mhmtn.satellites2.data.model.SatellitesItem
@@ -14,7 +13,6 @@ import com.mhmtn.satellites2.util.getItemById
 import com.mhmtn.satellites2.util.readJsonFromAssets
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 

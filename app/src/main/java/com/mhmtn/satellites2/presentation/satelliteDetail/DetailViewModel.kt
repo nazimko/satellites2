@@ -3,7 +3,6 @@ package com.mhmtn.satellites2.presentation.satelliteDetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mhmtn.satellites2.domain.useCase.getPositions.GetPositionsUseCase
 import com.mhmtn.satellites2.domain.useCase.getSatelliteDetail.GetSatelliteDetailUseCase
 import com.mhmtn.satellites2.util.Constants.SatelliteID
 import com.mhmtn.satellites2.util.Constants.SatelliteName
@@ -20,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val useCase: GetSatelliteDetailUseCase,
-    private val positionsUseCase: GetPositionsUseCase,
     private val stateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -29,7 +27,6 @@ class DetailViewModel @Inject constructor(
 
     init {
         stateHandle.get<String>(SatelliteID)?.let {
-           // getPositions(it.toInt())
             getSatelliteDetail(it.toInt())
         }
         _state.update { it.copy(name = stateHandle.get<String>(SatelliteName).toString()) }
@@ -59,22 +56,4 @@ class DetailViewModel @Inject constructor(
             }
         }
     }
-
-    /*
-    private fun getPositions(id: Int) = viewModelScope.launch {
-        positionsUseCase.executeGetPositions(id = id).onStart {
-            _state.update { it.copy(isLoading = true) }
-        }.collect { res ->
-            when (res) {
-                is Resource.Error -> {
-                    _state.update { it.copy(error = res.message.orEmpty(), isLoading = false) }
-                }
-                is Resource.Success -> {
-                    _state.update { it.copy(position = res.data!!, isLoading = false) }
-                }
-            }
-        }
-    }
-
-     */
 }

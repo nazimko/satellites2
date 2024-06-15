@@ -1,6 +1,5 @@
 package com.mhmtn.satellites2.presentation.satellites.views
 
-import android.content.Context
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,10 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.mhmtn.satellites2.data.model.SatellitesItem
 import com.mhmtn.satellites2.data.repo.Destination
 import com.mhmtn.satellites2.presentation.theme.Gray80
