@@ -32,51 +32,56 @@ import androidx.compose.ui.unit.dp
 import com.mhmtn.satellites2.data.model.SatellitesItem
 import com.mhmtn.satellites2.presentation.satellites.SatellitesState
 import com.mhmtn.satellites2.presentation.theme.Gray80
+
 @Composable
 fun HomeScreen(
-        state : SatellitesState,
-        onNavigate : (String) -> Unit,
-        makeSearch : (String) -> Unit,
-        updateSearchKey : (String) -> Unit
+    state: SatellitesState,
+    onNavigate: (String) -> Unit,
+    makeSearch: (String) -> Unit,
+    updateSearchKey: (String) -> Unit
 ) {
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(Gray80),
-            contentAlignment = Alignment.TopCenter
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Gray80),
+        contentAlignment = Alignment.TopCenter
     ) {
         Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SearchBar(modifier = Modifier
-                .background(color = Gray80)
-                .padding(16.dp),
-                    onSearch = {
-                               makeSearch(it)
-                    },
-                    onValueChange = {
-                                    updateSearchKey(it)
-                    },
-                    searchKey = state.searchKey)
+            SearchBar(
+                modifier = Modifier
+                    .background(color = Gray80)
+                    .padding(16.dp),
+                onSearch = {
+                    makeSearch(it)
+                },
+                onValueChange = {
+                    updateSearchKey(it)
+                },
+                searchKey = state.searchKey
+            )
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(state.satellites) {
-                    SatelliteRow(satellite = it, onNavigate = onNavigate )
-                    HorizontalDivider(thickness = 0.75.dp,color = Color.Black)
+                    SatelliteRow(satellite = it, onNavigate = onNavigate)
+                    HorizontalDivider(thickness = 0.75.dp, color = Color.Black)
                 }
             }
         }
 
         if (state.error.isNotBlank()) {
             Text(
-                    text = state.error,
-                    color = Color.Red,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp)
-                        .align(Alignment.Center))
+                text = state.error,
+                color = Color.Red,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp)
+                    .align(Alignment.Center)
+            )
         }
         if (state.isLoading) {
             CircularProgressIndicator()
@@ -86,10 +91,10 @@ fun HomeScreen(
 
 @Composable
 fun SearchBar(
-        modifier: Modifier = Modifier,
-        onSearch: (String) -> Unit = {},
-        onValueChange: (String) -> Unit = {},
-        searchKey: String,
+    modifier: Modifier = Modifier,
+    onSearch: (String) -> Unit = {},
+    onValueChange: (String) -> Unit = {},
+    searchKey: String,
 ) {
 
     Box(modifier = modifier) {
@@ -99,7 +104,7 @@ fun SearchBar(
             singleLine = true,
             textStyle = TextStyle(color = MaterialTheme.colorScheme.tertiary),
             shape = RoundedCornerShape(12.dp),
-            placeholder = {Text(text = "Search")},
+            placeholder = { Text(text = "Search") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp, vertical = 6.dp)
@@ -118,6 +123,7 @@ fun SearchBar(
         )
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview(
@@ -129,7 +135,7 @@ fun HomeScreenPreview(
                 SatellitesItem(active = false, id = 2, name = "Satellite2"),
                 SatellitesItem(active = true, id = 3, name = "Satellite3")
             )
-        ) ,
+        ),
         onNavigate = {},
         makeSearch = {},
         updateSearchKey = {})

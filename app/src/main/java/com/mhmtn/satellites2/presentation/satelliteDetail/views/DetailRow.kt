@@ -8,18 +8,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 
 @Composable
-fun DetailRow(text:String, detail1: Int, detail2: Int?) {
+fun DetailRow(text: String, detail1: Int, detail2: Int?) {
     val text1 = buildAnnotatedString {
-        withStyle(style = SpanStyle(
-            fontWeight = FontWeight.Bold
-        )
-        ){
+        withStyle(
+            style = SpanStyle(
+                fontWeight = FontWeight.Bold
+            )
+        ) {
             append(text)
         }
         append(detail1.toString())
         if (detail2 == null) {
             append("")
-        }else{
+        } else {
             append("/")
             append(detail2.toString())
         }

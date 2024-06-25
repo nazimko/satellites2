@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SatelliteLocalDataSource @Inject constructor(
-        private val satelliteDao: SatelliteDao
+    private val satelliteDao: SatelliteDao
 ) {
     suspend fun insertSatellite(satelliteDetailEntity: SatelliteDetailEntity) {
         satelliteDao.insertSatellite(satelliteDetailEntity)

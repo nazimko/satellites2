@@ -25,8 +25,9 @@ class MainActivity : ComponentActivity() {
             Satellites2Theme {
                 val navController = rememberNavController()
                 NavHost(
-                        navController = navController,
-                        startDestination = Destination.HomeScreen.route) {
+                    navController = navController,
+                    startDestination = Destination.HomeScreen.route
+                ) {
                     composable(Destination.HomeScreen.route) {
                         val viewModel: SatellitesViewModel = hiltViewModel()
                         val state by viewModel.state.collectAsState()
@@ -35,10 +36,10 @@ class MainActivity : ComponentActivity() {
                             onNavigate = navController::navigate,
                             makeSearch = viewModel::makeSearch,
                             updateSearchKey = viewModel::updateSearchKey
-                            )
+                        )
                     }
                     composable(Destination.DetailScreen.route) {
-                        val viewModel : DetailViewModel = hiltViewModel()
+                        val viewModel: DetailViewModel = hiltViewModel()
                         val state by viewModel.state.collectAsState()
                         DetailScreen(
                             state = state

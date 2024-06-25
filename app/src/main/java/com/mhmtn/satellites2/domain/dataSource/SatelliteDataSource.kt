@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class SatelliteDataSource @Inject constructor(
-        private val context: Context
+    private val context: Context
 ) {
     suspend fun getSatellites(): Flow<Resource<List<SatellitesItem>>> = flow {
         try {

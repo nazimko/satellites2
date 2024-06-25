@@ -7,16 +7,9 @@ import com.google.gson.annotations.SerializedName
 
 @Entity
 data class SatelliteDetailEntity(
-    @ColumnInfo(name = "cost")
-    @SerializedName("cost_per_launch")
-    val costPerLaunch: Int,
-    @ColumnInfo(name = "firstFlight")
-    @SerializedName("first_flight")
-    val firstFlight: String,
-    @ColumnInfo(name = "height")
-    val height: Int,
-    @PrimaryKey
-    val id: Int,
-    @ColumnInfo(name = "mass")
-    val mass: Int
+    @ColumnInfo(name = "cost") @SerializedName("cost_per_launch") val costPerLaunch: Int,
+    @ColumnInfo(name = "firstFlight") @SerializedName("first_flight") val firstFlight: String,
+    @ColumnInfo(name = "height") val height: Int,
+    @PrimaryKey val id: Int,
+    @ColumnInfo(name = "mass") val mass: Int
 )

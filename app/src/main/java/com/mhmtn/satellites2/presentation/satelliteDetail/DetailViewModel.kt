@@ -34,12 +34,13 @@ class DetailViewModel @Inject constructor(
 
     private fun getSatelliteDetail(id: Int) = viewModelScope.launch {
         useCase.executeGetSatelliteDetail(id = id).onStart {
-            _state.update {it.copy(isLoading = true)}
+            _state.update { it.copy(isLoading = true) }
         }.collect { res ->
             when (res) {
                 is Resource.Error -> {
                     _state.update { it.copy(error = res.message.orEmpty(), isLoading = false) }
                 }
+
                 is Resource.Success -> {
                     val data = res.data!!
                     _state.update {
@@ -50,7 +51,8 @@ class DetailViewModel @Inject constructor(
                             costPerLaunch = data.costPerLaunch,
                             firstFlight = data.firstFlight,
                             position = data.positions,
-                            isLoading = false)
+                            isLoading = false
+                        )
                     }
                 }
             }

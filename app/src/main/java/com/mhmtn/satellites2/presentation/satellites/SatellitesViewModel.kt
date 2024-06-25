@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SatellitesViewModel @Inject constructor(
-        private val useCase: GetSatelliteUseCase,
-        private val searchUseCase: SearchSatelliteUseCase
+    private val useCase: GetSatelliteUseCase,
+    private val searchUseCase: SearchSatelliteUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SatellitesState())

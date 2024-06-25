@@ -6,8 +6,8 @@ import com.mhmtn.satellites2.util.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-open class GetSatelliteUseCase @Inject constructor(private val repo : SatelliteRepo) {
-   suspend fun executeGetSatellites () : Flow<Resource<List<SatellitesItem>>>  {
+open class GetSatelliteUseCase @Inject constructor(private val repo: SatelliteRepo) {
+    suspend fun executeGetSatellites(): Flow<Resource<List<SatellitesItem>>> {
         return repo.getSatellites()
     }
 }

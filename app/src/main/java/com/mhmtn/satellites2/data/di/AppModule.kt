@@ -27,23 +27,26 @@ object AppModule {
     }
 
     @Provides
-    fun provideSatelliteDao(satelliteDB : SatelliteDatabase): SatelliteDao{
+    fun provideSatelliteDao(satelliteDB: SatelliteDatabase): SatelliteDao {
         return satelliteDB.satelliteDao()
     }
 
     @Provides
     @Singleton
-    fun providesSatelliteRepo(dataSource: SatelliteDataSource, localDataSource: SatelliteLocalDataSource) : SatelliteRepo{
-        return SatelliteRepoImpl(dataSource,localDataSource)
+    fun providesSatelliteRepo(
+        dataSource: SatelliteDataSource,
+        localDataSource: SatelliteLocalDataSource
+    ): SatelliteRepo {
+        return SatelliteRepoImpl(dataSource, localDataSource)
     }
 
     @Provides
     @Singleton
-    fun provideContext (application: Application): Context = application.applicationContext
+    fun provideContext(application: Application): Context = application.applicationContext
 
     @Provides
     @Singleton
-    fun provideSatelliteDB (@ApplicationContext context: Context):SatelliteDatabase {
+    fun provideSatelliteDB(@ApplicationContext context: Context): SatelliteDatabase {
         return Room.databaseBuilder(
             context,
             SatelliteDatabase::class.java,
