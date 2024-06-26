@@ -11,8 +11,8 @@ class SearchSatelliteUseCase @Inject constructor(
     private val getSatelliteUseCase: GetSatelliteUseCase
 
 ) {
-    suspend fun executeSearchSatellite(searchString: String): Flow<List<SatellitesItem>> =
-        getSatelliteUseCase.executeGetSatellites()
+    operator fun invoke(searchString: String): Flow<List<SatellitesItem>> =
+        getSatelliteUseCase.invoke()
             .filterIsInstance<Resource<List<SatellitesItem>>>()
             .map {
                 it.data.orEmpty().filter { satellite ->

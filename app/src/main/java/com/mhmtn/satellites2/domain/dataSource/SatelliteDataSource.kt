@@ -19,7 +19,7 @@ import javax.inject.Inject
 class SatelliteDataSource @Inject constructor(
     private val context: Context
 ) {
-    suspend fun getSatellites(): Flow<Resource<List<SatellitesItem>>> = flow {
+    fun getSatellites(): Flow<Resource<List<SatellitesItem>>> = flow {
         try {
             val response = context.readJsonFromAssets(SATELLITES)
             emit(Resource.Success(parseJsonToModel<List<SatellitesItem>>(response)))
@@ -28,7 +28,7 @@ class SatelliteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getSatelliteDetail(id: Int): Flow<Resource<SatelliteDetailEntity?>> = flow {
+    fun getSatelliteDetail(id: Int): Flow<Resource<SatelliteDetailEntity?>> = flow {
         val result = try {
             val response = context.readJsonFromAssets(SATELLITE_DETAIL)
             val item = getItemById(parseJsonToModel<List<SatelliteDetailEntity>>(response), id) {
@@ -41,7 +41,7 @@ class SatelliteDataSource @Inject constructor(
         emit(result)
     }
 
-    suspend fun getPositions(id: Int): Flow<Resource<String>> = flow {
+    fun getPositions(id: Int): Flow<Resource<String>> = flow {
         try {
             val response = context.readJsonFromAssets(POSITIONS)
             val positionItems = parseJsonToModel<DataList>(response)

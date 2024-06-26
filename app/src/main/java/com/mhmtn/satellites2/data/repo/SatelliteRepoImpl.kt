@@ -14,7 +14,7 @@ class SatelliteRepoImpl @Inject constructor(
     private val dataSource: SatelliteDataSource,
     private val localDataSource: SatelliteLocalDataSource
 ) : SatelliteRepo {
-    override suspend fun getSatellites(): Flow<Resource<List<SatellitesItem>>> {
+    override fun getSatellites(): Flow<Resource<List<SatellitesItem>>> {
         return dataSource.getSatellites()
     }
 
@@ -28,7 +28,7 @@ class SatelliteRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPositions(id: Int): Flow<Resource<String>> {
+    override fun getPositions(id: Int): Flow<Resource<String>> {
         return dataSource.getPositions(id)
     }
 }

@@ -28,27 +28,34 @@ class SatellitesViewModel @Inject constructor(
     }
 
     private fun getSatellites() = viewModelScope.launch {
-        useCase.executeGetSatellites().onStart {
-            _state.update { it.copy(isLoading = true) }
-        }.collect { resource ->
-            when (resource) {
-                is Resource.Error -> {
-                    updateUiState { copy(error = resource.message.orEmpty(), isLoading = false) }
-                }
+        useCase.invoke()
+            .onStart {
+                _state.update { it.copy(isLoading = true) }
+            }.collect { resource ->
+                when (resource) {
+                    is Resource.Error -> {
+                        updateUiState {
+                            copy(
+                                error = resource.message.orEmpty(),
+                                isLoading = false
+                            )
+                        }
+                    }
 
-                is Resource.Success -> {
-                    updateUiState { copy(satellites = resource.data!!, isLoading = false) }
+                    is Resource.Success -> {
+                        updateUiState { copy(satellites = resource.data!!, isLoading = false) }
+                    }
                 }
             }
-        }
     }
 
     fun makeSearch(key: String) = viewModelScope.launch {
-        searchUseCase.executeSearchSatellite(key).onStart {
-            updateUiState { copy(isLoading = true) }
-        }.collect { list ->
-            updateUiState { copy(satellites = list, isLoading = false) }
-        }
+        searchUseCase.invoke(key)
+            .onStart {
+                updateUiState { copy(isLoading = true) }
+            }.collect { list ->
+                updateUiState { copy(satellites = list, isLoading = false) }
+            }
     }
 
     fun updateSearchKey(key: String) = updateUiState { copy(searchKey = key) }
