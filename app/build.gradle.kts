@@ -76,6 +76,8 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.11")
     testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.0")
+    androidTestImplementation ("android.arch.core:core-testing:1.1.1")
+    androidTestImplementation ("com.google.truth:truth:1.4.3")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

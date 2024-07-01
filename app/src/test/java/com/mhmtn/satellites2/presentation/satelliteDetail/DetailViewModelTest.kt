@@ -4,22 +4,18 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth.assertThat
 import com.mhmtn.satellites2.data.model.DetailModel
-import com.mhmtn.satellites2.data.model.Position
 import com.mhmtn.satellites2.domain.repo.FakeSatelliteRepo
 import com.mhmtn.satellites2.domain.useCase.getSatelliteDetail.GetSatelliteDetailUseCase
-import com.mhmtn.satellites2.domain.useCase.getSatellites.GetSatelliteUseCase
 import com.mhmtn.satellites2.util.Constants.SatelliteID
 import com.mhmtn.satellites2.util.Constants.SatelliteName
 import com.mhmtn.satellites2.util.Resource
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -86,8 +82,6 @@ class DetailViewModelTest {
         assertThat(state.position).isEqualTo("Latitude/Longitude")
         assertThat(state.name).isEqualTo("TestSat")
         assertThat(state.isLoading).isFalse()
-
-
     }
 
     @Test
