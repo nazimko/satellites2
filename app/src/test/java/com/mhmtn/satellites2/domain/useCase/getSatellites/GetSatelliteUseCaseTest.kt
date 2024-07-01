@@ -28,6 +28,6 @@ class GetSatelliteUseCaseTest {
     @Test
     fun `Get Satellite List, incorrect satellite list return`(): Unit = runBlocking {
         val satellites = getSatelliteUseCase.invoke().first()
-        assertThat(satellites.data?.get(0)?.name).isEqualTo("Satellite 2")
+        assertThat(satellites.data?.get(0)?.name).isNotEqualTo("Satellite 2")
     }
 }

@@ -1,5 +1,6 @@
 package com.mhmtn.satellites2.presentation.satellites
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mhmtn.satellites2.domain.useCase.getSatellites.GetSatelliteUseCase

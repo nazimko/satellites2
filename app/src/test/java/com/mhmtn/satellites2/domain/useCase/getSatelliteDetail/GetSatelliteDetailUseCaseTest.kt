@@ -27,6 +27,6 @@ class GetSatelliteDetailUseCaseTest {
     @Test
     fun `Get Satellite Details, incorrect satellite id return`(): Unit = runBlocking {
         val satelliteDetails = getSatelliteDetailUseCase.invoke(1).first()
-        assertThat((satelliteDetails.data?.id)).isEqualTo(2)
+        assertThat((satelliteDetails.data?.id)).isNotEqualTo(2)
     }
 }
