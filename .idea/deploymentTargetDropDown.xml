@@ -2,22 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="SatelliteDaoTest">
-        <State />
-      </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="get_correct_satellite()">
-        <State />
-      </entry>
-      <entry key="get_incorrect_satellite()">
-        <State />
-      </entry>
-      <entry key="insert_and_get_incorrect_satellite()">
-        <State />
-      </entry>
-      <entry key="insert_satellite_correct_id_return()">
         <State />
       </entry>
     </value>

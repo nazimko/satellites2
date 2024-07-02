@@ -11,11 +11,10 @@ import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-
-
 @ExperimentalCoroutinesApi
 class SatellitesViewModelTest {
 
@@ -55,5 +54,29 @@ class SatellitesViewModelTest {
         assertEquals(satellites, value.satellites)
         assertEquals(false, value.isLoading)
         assertEquals("", value.error)
+    }
+
+    @Test
+    fun `makeSearch should update state correctly`() = runTest {
+        val key = "searchKey"
+        val satellites = fakeSatelliteRepo.getSatellites().first().data!!
+        val mock = mockk<SearchSatelliteUseCase>()
+        coEvery { mock.invoke(key) } returns flowOf(satellites)
+
+        viewModel.makeSearch(key)
+
+        val state = viewModel.state.value
+        assertEquals(satellites, state.satellites)
+        assertEquals(false, state.isLoading)
+    }
+
+    @Test
+    fun `updateSearchKey should update searchKey in state`() {
+        val key = "newSearchKey"
+
+        viewModel.updateSearchKey(key)
+
+        val state = viewModel.state.value
+        assertEquals(key, state.searchKey)
     }
 }
