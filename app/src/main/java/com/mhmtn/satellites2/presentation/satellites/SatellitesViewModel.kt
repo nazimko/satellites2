@@ -28,7 +28,8 @@ class SatellitesViewModel @Inject constructor(
         getSatellites()
     }
 
-    private fun getSatellites() = viewModelScope.launch {
+    @VisibleForTesting
+    fun getSatellites() = viewModelScope.launch {
         useCase.invoke()
             .onStart {
                 _state.update { it.copy(isLoading = true) }

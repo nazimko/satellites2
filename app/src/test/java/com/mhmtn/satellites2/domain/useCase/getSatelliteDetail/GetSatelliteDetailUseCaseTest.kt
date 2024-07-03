@@ -1,5 +1,6 @@
 package com.mhmtn.satellites2.domain.useCase.getSatelliteDetail
 
+import app.cash.turbine.test
 import com.mhmtn.satellites2.domain.repo.FakeSatelliteRepo
 import com.mhmtn.satellites2.util.Resource
 import io.mockk.coEvery
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Test
@@ -32,7 +34,7 @@ class GetSatelliteDetailUseCaseTest {
     }
 
     @Test
-    fun `invoke returns success when both detail and positions are success`() = runBlocking {
+    fun `invoke returns success when both detail and positions are success`() = runTest {
 
         val id = 1
         val details = fakeSatelliteRepo.getSatelliteDetail(id).first().data!!
@@ -43,16 +45,18 @@ class GetSatelliteDetailUseCaseTest {
         coEvery { mock.getSatelliteDetail(id) } returns flowOf(Resource.Success(details))
         every { mock.getPositions(id) } returns flowOf(Resource.Success(positions))
 
-        val result = getSatelliteDetailUseCase.invoke(id).first()
+        getSatelliteDetailUseCase.invoke(id).test {
+            val result = awaitItem()
+            assertTrue(result is Resource.Success)
+            result as Resource.Success
 
-        assertTrue(result is Resource.Success)
-        result as Resource.Success
-
-        assertEquals(id, result.data!!.id)
-        assertEquals(details.costPerLaunch, result.data!!.costPerLaunch)
-        assertEquals(details.height, result.data!!.height)
-        assertEquals(details.mass, result.data!!.mass)
-        assertEquals(details.firstFlight, result.data!!.firstFlight)
-        assertEquals(positions, result.data!!.positions)
+            assertEquals(id, result.data!!.id)
+            assertEquals(details.costPerLaunch, result.data!!.costPerLaunch)
+            assertEquals(details.height, result.data!!.height)
+            assertEquals(details.mass, result.data!!.mass)
+            assertEquals(details.firstFlight, result.data!!.firstFlight)
+            assertEquals(positions, result.data!!.positions)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 }

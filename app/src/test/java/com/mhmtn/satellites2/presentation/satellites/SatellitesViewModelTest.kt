@@ -3,6 +3,8 @@ package com.mhmtn.satellites2.presentation.satellites
 import com.mhmtn.satellites2.domain.repo.FakeSatelliteRepo
 import com.mhmtn.satellites2.domain.useCase.getSatellites.GetSatelliteUseCase
 import com.mhmtn.satellites2.domain.useCase.getSatellites.SearchSatelliteUseCase
+import com.mhmtn.satellites2.testConstants.TestConstants.NEW_SEARCH_KEY
+import com.mhmtn.satellites2.testConstants.TestConstants.TEST_SEARCH_KEY
 import io.mockk.coEvery
 import io.mockk.mockk
 import org.junit.Before
@@ -45,9 +47,7 @@ class SatellitesViewModelTest {
 
         coEvery { mock.invoke() } returns satellitesFlow
 
-        val getSatellitesMethod = viewModel.javaClass.getDeclaredMethod("getSatellites")
-        getSatellitesMethod.isAccessible = true
-        getSatellitesMethod.invoke(viewModel)
+        viewModel.getSatellites()
 
         val value = viewModel.state.value
 
@@ -58,7 +58,7 @@ class SatellitesViewModelTest {
 
     @Test
     fun `makeSearch should update state correctly`() = runTest {
-        val key = "searchKey"
+        val key = TEST_SEARCH_KEY
         val satellites = fakeSatelliteRepo.getSatellites().first().data!!
         val mock = mockk<SearchSatelliteUseCase>()
         coEvery { mock.invoke(key) } returns flowOf(satellites)
@@ -72,7 +72,7 @@ class SatellitesViewModelTest {
 
     @Test
     fun `updateSearchKey should update searchKey in state`() {
-        val key = "newSearchKey"
+        val key = NEW_SEARCH_KEY
 
         viewModel.updateSearchKey(key)
 

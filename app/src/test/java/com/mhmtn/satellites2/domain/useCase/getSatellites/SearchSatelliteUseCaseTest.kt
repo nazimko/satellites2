@@ -1,27 +1,31 @@
 package com.mhmtn.satellites2.domain.useCase.getSatellites
 
-import com.google.common.truth.Truth
-import com.google.common.truth.Truth.assertThat
+import android.arch.core.executor.testing.InstantTaskExecutorRule
+import app.cash.turbine.test
 import com.mhmtn.satellites2.data.model.SatellitesItem
-import com.mhmtn.satellites2.domain.repo.FakeSatelliteRepo
-import com.mhmtn.satellites2.domain.useCase.getSatelliteDetail.GetSatelliteDetailUseCase
+import com.mhmtn.satellites2.testConstants.TestConstants.TEST_ERROR
+import com.mhmtn.satellites2.testConstants.TestConstants.TEST_SEARCH_KEY
 import com.mhmtn.satellites2.util.Resource
-import io.mockk.mockk
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.rules.TestRule
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
+@ExperimentalCoroutinesApi
 class SearchSatelliteUseCaseTest {
 
+    @get:Rule
+    var rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var searchSatelliteUseCase: SearchSatelliteUseCase
 
@@ -35,9 +39,9 @@ class SearchSatelliteUseCaseTest {
     }
 
     @Test
-    fun `Search Satellite, correct satellite return`(): Unit = runTest {
+    fun `invoke should filter satellites by name`(): Unit = runTest {
 
-        val searchString = "space"
+        val searchString = TEST_SEARCH_KEY
 
         val satellites = listOf(
             SatellitesItem(true, 1, "Satellite A"),
@@ -49,13 +53,45 @@ class SearchSatelliteUseCaseTest {
 
         whenever(getSatelliteUseCase.invoke()).thenReturn(flowOf(resource))
 
-        val result = searchSatelliteUseCase
-
-        result.invoke(searchString).collect{
-            assertEquals(
-                it.map { it.name },
-                satellites.filter { it.name.contains(searchString,ignoreCase = true) }.map { it.name }
-            )
+        searchSatelliteUseCase.invoke(searchString).test {
+            assertEquals(awaitItem(), satellites.filter { it.name.contains(searchString, ignoreCase = true) })
+            awaitComplete()
         }
+        verify(getSatelliteUseCase).invoke()
+    }
+
+
+    @Test
+    fun `invoke should handle empty list`() = runTest() {
+
+        val searchString = TEST_SEARCH_KEY
+
+        val resource = Resource.Success(emptyList<SatellitesItem>())
+
+        whenever(getSatelliteUseCase.invoke()).thenReturn(flowOf(resource))
+
+        searchSatelliteUseCase.invoke(searchString).test {
+            assertEquals(awaitItem(), emptyList<SatellitesItem>())
+            awaitComplete()
+        }
+        verify(getSatelliteUseCase).invoke()
+    }
+
+    @Test
+    fun `invoke should handle error`() = runTest {
+
+        val searchString = TEST_SEARCH_KEY
+        val error = TEST_ERROR
+        val resource = Resource.Error<List<SatellitesItem>>(error)
+
+        whenever(getSatelliteUseCase.invoke()).thenReturn(flow {
+            emit(resource)
+            throw Exception(error)
+        })
+
+        searchSatelliteUseCase.invoke(searchString).catch {
+            assertEquals(it.message, error)
+        }
+        verify(getSatelliteUseCase).invoke()
     }
 }

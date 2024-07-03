@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.Packaging
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -54,7 +56,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-
 }
 
 
@@ -77,8 +78,10 @@ dependencies {
     testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.0")
     testImplementation ("org.junit.jupiter:junit-jupiter:5.8.2")
+    testImplementation("app.cash.turbine:turbine:1.1.0")
     androidTestImplementation ("android.arch.core:core-testing:1.1.1")
     androidTestImplementation ("com.google.truth:truth:1.4.3")
+    androidTestImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

@@ -6,6 +6,10 @@ import com.google.common.truth.Truth.assertThat
 import com.mhmtn.satellites2.data.model.DetailModel
 import com.mhmtn.satellites2.domain.repo.FakeSatelliteRepo
 import com.mhmtn.satellites2.domain.useCase.getSatelliteDetail.GetSatelliteDetailUseCase
+import com.mhmtn.satellites2.testConstants.TestConstants.TEST_FIRST_FLIGHT
+import com.mhmtn.satellites2.testConstants.TestConstants.TEST_ID
+import com.mhmtn.satellites2.testConstants.TestConstants.TEST_POSITION
+import com.mhmtn.satellites2.testConstants.TestConstants.TEST_SATELLITE_NAME
 import com.mhmtn.satellites2.util.Constants.SatelliteID
 import com.mhmtn.satellites2.util.Constants.SatelliteName
 import com.mhmtn.satellites2.util.Resource
@@ -36,7 +40,7 @@ class DetailViewModelTest {
     private lateinit var getSatelliteDetailUseCase: GetSatelliteDetailUseCase
     private val mock = mockk<GetSatelliteDetailUseCase>()
     private val savedStateHandle: SavedStateHandle =
-        SavedStateHandle(mapOf(SatelliteID to "1", SatelliteName to "TestSat"))
+        SavedStateHandle(mapOf(SatelliteID to TEST_ID, SatelliteName to TEST_SATELLITE_NAME))
     private val testDispatcher = UnconfinedTestDispatcher()
     private lateinit var viewModel: DetailViewModel
 
@@ -78,9 +82,9 @@ class DetailViewModelTest {
         assertThat(state.height).isEqualTo(500)
         assertThat(state.mass).isEqualTo(40000)
         assertThat(state.costPerLaunch).isEqualTo(1000)
-        assertThat(state.firstFlight).isEqualTo("13.03.1990")
-        assertThat(state.position).isEqualTo("Latitude/Longitude")
-        assertThat(state.name).isEqualTo("TestSat")
+        assertThat(state.firstFlight).isEqualTo(TEST_FIRST_FLIGHT)
+        assertThat(state.position).isEqualTo(TEST_POSITION)
+        assertThat(state.name).isEqualTo(TEST_SATELLITE_NAME)
         assertThat(state.isLoading).isFalse()
     }
 
